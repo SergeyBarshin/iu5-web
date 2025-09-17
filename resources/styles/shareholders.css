@@ -1,0 +1,452 @@
+/* Экран материалов: базовая обертка страницы */
+.screen {
+  background-color: var(--page-bg);
+  display: block;
+  width: 100%;
+}
+
+/* Внутренний контейнер: ширина 100% и отступ под фиксированный header */
+.screen .div {
+  background-color: var(--page-bg);
+  width: 100%;
+  min-height: calc(100vh - 76px);
+  padding-top: 76px;
+  position: relative;
+}
+
+/* Основной контейнер контента: центрирование и максимальная ширина */
+.screen .body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1180px;
+  align-items: stretch;
+  padding: 80px 16px 60px;
+  margin: 0 auto;
+}
+
+/* Секция каталога материалов */
+.screen .catalog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 0;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Вариативный контейнер секции (служебная обертка) */
+.screen .view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Заголовок страницы каталога */
+.screen .text-wrapper {
+  align-self: stretch;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  color: var(--black);
+  font-size: 48px;
+  text-align: center;
+  line-height: 56px;
+  position: relative;
+  letter-spacing: 0;
+}
+
+/* Строка поиска: контейнер */
+.screen .view-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Поле поиска: визуальная обертка с рамкой и скруглением */
+.screen .overlap-group-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  height: 52px;
+  background-color: var(--white);
+  border-radius: 26px;
+  border: 1px solid var(--gray-border);
+}
+
+/* Поле поиска: внутренности (иконка + ввод) */
+.screen .overlap-group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Иконка поиска слева */
+.screen .image-fill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 18px;
+}
+
+.screen .component {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.screen .container {
+  display: none;
+}
+
+.screen .text-wrapper-2 {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.screen .component-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 18px 0 0;
+  height: 100%;
+  flex: 1;
+}
+
+.screen .component-2 {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: var(--black);
+  font-size: 16px;
+  line-height: normal;
+  width: 100%;
+  height: 100%;
+}
+
+.screen .component-2::placeholder {
+  color: var(--gray-text);
+  opacity: 0.8;
+}
+
+/* Сетка карточек материалов */
+.screen .view-2 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 60px 24px;
+  width: 100%;
+}
+
+/* Карточка материала: контейнер */
+.screen .view-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border-radius: 24px;
+  background-color: var(--card-bg);
+  padding: 0 32px 32px;
+  text-align: center;
+}
+
+/* Изображение карточки: позиционирование для эффекта "сидения" */
+.screen .img {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-top: -70px;
+  margin-bottom: 24px;
+}
+
+.screen .img img {
+  height: 140px;
+  width: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Тело карточки: внутренние отступы и вертикальный стек */
+.screen .body-2 {
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen .div-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* Имя акционера */
+.screen .text-wrapper-3 {
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 30px;
+  position: relative;
+  align-self: stretch;
+  color: var(--black);
+  letter-spacing: 0;
+}
+
+/* Контейнер описания */
+.screen .view-4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  min-height: 66px; /* для выравнивания карточек по высоте (3 строки) */
+}
+
+/* Краткое описание */
+.screen .text-wrapper-4 {
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  position: relative;
+  align-self: stretch;
+  color: var(--gray-text);
+  letter-spacing: 0;
+}
+
+.screen .frame {
+  display: none;
+}
+
+/* Блок доли в компании */
+.screen .mr-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 0 0 auto;
+  margin-top: 20px;
+}
+
+.screen .mr {
+  position: relative;
+  width: 100%;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  color: var(--gray-text);
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 22px;
+}
+
+.screen .span {
+  font-weight: 400;
+}
+
+.screen .text-wrapper-5 {
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--black);
+}
+
+/* Контейнер кнопки */
+.screen .view-5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  margin-top: 24px;
+}
+
+/* Кнопка "Подробнее" */
+.screen .view-6 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 24px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--red);
+  border-radius: 8px;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.screen .view-6:hover {
+  background-color: var(--red-hover);
+}
+
+/* Текст на кнопке */
+.screen .text {
+  width: fit-content;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 500;
+  color: var(--white);
+  font-size: 16px;
+  text-align: center;
+  line-height: 22px;
+  white-space: nowrap;
+  position: relative;
+  letter-spacing: 0;
+}
+
+/* Фиксированный хедер страницы */
+.screen .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 76px;
+  background-color: var(--black);
+}
+
+/* Контейнер содержимого в хедере */
+.screen .container-2 {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1180px;
+  height: 76px;
+  align-items: center;
+  gap: 0;
+  padding: 16px;
+  margin: 0 auto;
+}
+
+/* Блок для логотипа/картинки в хедере */
+.screen .logo-image-wrapper {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+/* Изображение логотипа */
+.screen .logo-image {
+  position: relative;
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.screen .view-8 {
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+  height: 40px;
+}
+
+/* Плавающая кнопка заявки в левом нижнем углу */
+.floating-cart {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 2000;
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  border: 1px solid var(--gray-border);
+}
+
+/* Иконка внутри плавающей кнопки */
+.floating-cart img {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+/* Бейдж количества в заявке */
+.floating-cart .cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 12px;
+  background: var(--red);
+  color: var(--white);
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--white);
+}
+
+/* Адаптив: планшеты и десктопы до 1200px */
+@media (max-width: 1200px) {
+  .screen .body {
+    padding: 60px 16px 40px;
+  }
+}
+
+/* Адаптив: Планшеты */
+@media (max-width: 992px) {
+  .screen .view-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 50px 20px;
+  }
+  .screen .text-wrapper {
+    font-size: 40px;
+    line-height: 48px;
+  }
+}
+
+/* Адаптив: мобильные устройства */
+@media (max-width: 768px) {
+  .screen .body {
+    padding: 40px 12px;
+  }
+  .screen .text-wrapper {
+    font-size: 32px;
+    line-height: 40px;
+  }
+  .screen .catalog {
+    gap: 30px;
+  }
+  .screen .view-2 {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+}

@@ -1,0 +1,235 @@
+/* Базовая обертка страницы */
+.screen {
+  background-color: var(--page-bg);
+  display: block;
+  width: 100%;
+}
+
+/* Внутренний контейнер с отступом под хедер */
+.screen .div {
+  background-color: var(--page-bg);
+  width: 100%;
+  min-height: calc(100vh - 76px);
+  padding-top: 76px;
+  position: relative;
+  display: flex;
+  align-items: center; /* Центрируем контент по вертикали */
+}
+
+/* Основной контейнер контента */
+.screen .body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1180px;
+  align-items: stretch;
+  padding: 60px 16px;
+  margin: 0 auto;
+}
+
+/* Главный контейнер с сеткой (текст + фото) */
+.screen .view {
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Текст занимает доступное место, фото - фиксированную ширину */
+  align-items: center; /* Вертикальное выравнивание по центру */
+  gap: 60px;
+  position: relative;
+  width: 100%;
+}
+
+/* Контейнер для текстовой информации (левая колонка) */
+.screen .view-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+}
+
+.screen .view-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+.screen .div-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+/* Имя акционера (главный заголовок) */
+.screen .text-wrapper {
+  position: relative;
+  font-family: "Inter", Helvetica, sans-serif;
+  font-weight: 700;
+  color: var(--black);
+  font-size: 40px;
+  letter-spacing: 0;
+  line-height: 52px;
+}
+
+/* Контейнер для описания и доли */
+.screen .container-wrapper {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  width: 100%;
+}
+
+.screen .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 24px;
+  width: 100%;
+}
+
+/* Описание акционера */
+.screen .p {
+  align-self: stretch;
+  font-family: "Inter", Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+  position: relative;
+  margin: 0;
+  color: var(--gray-text);
+  letter-spacing: 0;
+  max-width: 580px; /* Ограничиваем длину строки для читаемости */
+}
+
+.screen .horizontal-divider-wrapper {
+  width: 100%;
+  max-width: 580px; /* Совпадает с шириной текста */
+}
+
+/* Красная разделительная линия */
+.screen .horizontal-divider {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background-color: var(--red);
+}
+
+/* Блок с долей в компании */
+.screen .mr {
+  position: relative;
+  font-family: "Inter", Helvetica, sans-serif;
+  font-weight: 400;
+  color: var(--gray-text);
+  font-size: 18px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+/* Текст "Доля в компании:" */
+.screen .span {
+  font-weight: 400; /* Убираем жирность, если она была */
+}
+
+/* Процент доли */
+.screen .text-wrapper-3 {
+  font-family: "Inter", Helvetica, sans-serif;
+  font-weight: 700; /* Делаем значение жирным */
+  color: var(--black);
+  margin-left: 8px;
+}
+
+/* Изображение акционера (правая колонка) */
+.screen .image {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  object-fit: contain;
+  justify-self: center; /* Центрируем фото в колонке */
+}
+
+/* Фиксированный хедер */
+.screen .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 76px;
+  background-color: var(--black);
+}
+
+/* Контейнер хедера */
+.screen .container-2 {
+  display: flex;
+  width: 100%;
+  max-width: 1180px;
+  height: 100%;
+  align-items: center;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+.screen .logo-image-wrapper {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.screen .logo-image {
+  position: relative;
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.screen .view-3 {
+  flex: 1;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+  .screen .view {
+    grid-template-columns: 1fr; /* Переключаемся в одну колонку */
+    gap: 40px;
+    text-align: center; /* Центрируем текст на мобильных */
+  }
+
+  .screen .view-2 {
+    align-items: center; /* Центрируем все текстовые блоки */
+    order: 2; /* Текст идет после фото */
+  }
+
+  .screen .p {
+    max-width: 100%;
+  }
+
+  .screen .horizontal-divider-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .screen .image {
+    order: 1; /* Фото идет первым */
+    justify-self: center; /* Центрируем фото */
+  }
+}
+
+@media (max-width: 768px) {
+  .screen .body {
+    padding: 40px 12px;
+  }
+  .screen .text-wrapper {
+    font-size: 32px;
+    line-height: 40px;
+  }
+  .screen .p,
+  .screen .mr {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

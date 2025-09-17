@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <!-- Title страницы теперь имя акционера -->
+    <title>{{ .shareholder.Name }}</title>
+    <!-- Стили оставляем старые -->
+    <link rel="stylesheet" href="/static/styles/globals.css" />
+    <link rel="stylesheet" href="/static/styles/shareholder.css" />
+    <link
+      rel="icon"
+      href="http://localhost:8080/static/img/logo1.svg"
+      type="image/svg"
+    />
+  </head>
+  <body>
+    <div class="screen">
+      <div class="div">
+        <div class="body">
+          <div class="view">
+            <div class="view-2">
+              <div class="view-wrapper">
+                <div class="div-wrapper">
+                  <!-- Главный заголовок - полное имя акционера -->
+                  <div class="text-wrapper">{{ .shareholder.Name }}</div>
+                </div>
+              </div>
+              <div class="container-wrapper">
+                <div class="container">
+                  <div class="div-wrapper">
+                    <!-- Описание осталось как есть -->
+                    <p class="p">{{ .shareholder.Description }}</p>
+                  </div>
+                  <div class="horizontal-divider-wrapper">
+                    <div class="horizontal-divider"></div>
+                  </div>
+                  <!-- Вместо массы и коэффициента выводим долю -->
+                  <p class="mr">
+                    <span class="span">Доля в компании:</span>
+                    <span class="text-wrapper-3">
+                      {{ .shareholder.Share }}%
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Изображение акционера -->
+            <img
+              class="image"
+              src="{{ .shareholder.ImageURL }}"
+              alt="{{ .shareholder.Name }}"
+            />
+          </div>
+        </div>
+        <header class="header">
+          <div class="container-2">
+            <div class="logo-image-wrapper">
+              <a href="/shareholders"
+                ><img
+                  class="logo-image"
+                  src="http://localhost:8080/static/img/logo1.svg"
+                  alt="Логотип"
+              /></a>
+            </div>
+            <div class="view-8"></div>
+          </div>
+        </header>
+      </div>
+    </div>
+  </body>
+</html>

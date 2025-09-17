@@ -1,0 +1,111 @@
+package handler
+
+import (
+	"net/http"
+	"strconv"
+
+	"shareholder-app/internal/app/repository" // Проверьте имя модуля
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+)
+
+type Handler struct {
+	Repository *repository.Repository
+}
+
+func NewHandler(r *repository.Repository) *Handler {
+	return &Handler{
+		Repository: r,
+	}
+}
+
+type DividendResult struct {
+	Shareholder repository.Shareholder
+	Coefficient float64
+	Fine        float64
+	Dividend    float64
+}
+
+// GetShareholdersPage и GetShareholderPage не меняются.
+func (h *Handler) GetShareholdersPage(ctx *gin.Context) {
+	var shareholders []repository.Shareholder
+	var err error
+	searchQuery := ctx.Query("query")
+	if searchQuery == "" {
+		shareholders, err = h.Repository.GetShareholders()
+	} else {
+		shareholders, err = h.Repository.GetShareholdersByName(searchQuery)
+	}
+	if err != nil {
+		logrus.Errorf("Ошибка: %v", err)
+	}
+	count, _ := h.Repository.GetRequestItemsCount()
+	ctx.HTML(http.StatusOK, "index.html", gin.H{
+		"shareholders": shareholders,
+		"query":        searchQuery,
+		"Count":        count,
+	})
+}
+
+func (h *Handler) GetShareholderPage(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		ctx.String(http.StatusBadRequest, "Некорректный ID")
+		return
+	}
+	shareholder, err := h.Repository.GetShareholder(id)
+	if err != nil {
+		ctx.String(http.StatusNotFound, "Акционер не найден")
+		return
+	}
+	ctx.HTML(http.StatusOK, "shareholder.html", gin.H{
+		"shareholder": shareholder,
+	})
+}
+
+// ИЗМЕНЕНО: Логика GetRequestPage теперь чистая и правильная.
+func (h *Handler) GetRequestPage(ctx *gin.Context) {
+	totalProfitStr := ctx.DefaultQuery("total_profit", "1000000")
+	totalProfit, _ := strconv.ParseFloat(totalProfitStr, 64)
+
+	requestItems, _ := h.Repository.GetRequestItems()
+	
+	// Данные из формы для перерасчета
+	coeffsStr := ctx.QueryArray("coeffs")
+	finesStr := ctx.QueryArray("fines")
+	idsStr := ctx.QueryArray("ids")
+
+	results := make([]DividendResult, 0, len(requestItems))
+	for i, item := range requestItems {
+		shareholder, _ := h.Repository.GetShareholder(item.ShareholderID)
+
+		// ИЗМЕНЕНО: Значения по умолчанию берутся напрямую из item.
+		coeff := item.Coefficient
+		fine := item.Fine
+		
+		// Если данные пришли из формы, перезаписываем их для перерасчета.
+		if len(coeffsStr) > i && len(finesStr) > i && len(idsStr) > i && idsStr[i] == strconv.Itoa(shareholder.ID) {
+			coeff, _ = strconv.ParseFloat(coeffsStr[i], 64)
+			fine, _ = strconv.ParseFloat(finesStr[i], 64)
+		}
+
+		dividend := (totalProfit * (shareholder.Share / 100)) * coeff - fine
+
+		results = append(results, DividendResult{
+			Shareholder: shareholder,
+			Coefficient: coeff,
+			Fine:        fine,
+			Dividend:    dividend,
+		})
+	}
+
+	count, _ := h.Repository.GetRequestItemsCount()
+
+	ctx.HTML(http.StatusOK, "request.html", gin.H{
+		"results":           results,
+		"totalProfit":       totalProfit,
+		"shareholdersCount": count,
+	})
+}
