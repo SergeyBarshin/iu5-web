@@ -1,11 +1,9 @@
-/* Базовая обертка страницы */
 .screen {
   background-color: var(--page-bg);
   display: block;
   width: 100%;
 }
 
-/* Внутренний контейнер с отступом под хедер */
 .screen .div {
   background-color: var(--page-bg);
   width: 100%;
@@ -14,7 +12,6 @@
   padding-top: 76px;
 }
 
-/* Основной контейнер контента */
 .screen .body {
   display: flex;
   flex-direction: column;
@@ -26,12 +23,10 @@
   margin: 0 auto;
 }
 
-/* Секция с заголовком "Расчет дивидендов" (скрыта, т.к. нет в макете) */
 .screen .frame {
   display: none;
 }
 
-/* Контейнер для поля "Итоговая прибыль" */
 .screen .view {
   display: flex;
   align-items: center;
@@ -41,7 +36,6 @@
   border-radius: 24px;
 }
 
-/* Flex-контейнер для лейбла и инпута */
 .screen .div-2 {
   display: flex;
   align-items: center;
@@ -60,7 +54,6 @@
   flex-shrink: 0;
 }
 
-/* Стилизация текста-лейбла */
 .screen .text-wrapper-2 {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
@@ -69,7 +62,6 @@
   color: var(--gray-text);
 }
 
-/* Обертка для инпута прибыли */
 .screen .view-wrapper {
   flex: 1;
   flex-grow: 1;
@@ -85,7 +77,6 @@
   padding: 0;
 }
 
-/* Стилизация инпутов */
 .screen input[type="text"] {
   background: transparent;
   border: none;
@@ -98,7 +89,7 @@
   line-height: 24px;
 }
 .screen input[type="text"].text-wrapper-2 {
-  color: var(--black); /* Убеждаемся, что класс не перебивает цвет */
+  color: var(--black);
 }
 
 /* Секция со списком акционеров */
@@ -128,12 +119,10 @@
   gap: 24px;
 }
 
-/* Левая часть заголовка ("Акционер:") */
 .screen .frame-2 .frame-3:first-child {
-  flex: 1.5; /* Задает пропорцию для колонок */
+  flex: 1.5;
 }
 
-/* Заголовок "Акционер:" */
 .screen .text-wrapper-3 {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 500;
@@ -142,7 +131,6 @@
   color: var(--black);
 }
 
-/* Правая часть заголовка (три колонки) */
 .screen .frame-4 {
   flex: 1;
   display: grid;
@@ -150,7 +138,6 @@
   gap: 16px;
 }
 
-/* Текст заголовков колонок */
 .screen .text-wrapper-4 {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
@@ -159,7 +146,6 @@
   color: var(--gray-text);
 }
 
-/* Контейнер для списка карточек */
 .screen .view-6 {
   display: flex;
   flex-direction: column;
@@ -167,16 +153,14 @@
   width: 100%;
 }
 
-/* Карточка акционера */
 .screen .element {
-  display: block; /* Изменено, чтобы вложенный flex работал корректно */
+  display: block;
   padding: 24px;
   width: 100%;
   background-color: var(--card-bg);
   border-radius: 24px;
 }
 
-/* --- ИСПРАВЛЕНИЕ: Этот контейнер ДОЛЖЕН БЫТЬ ВИДЕН --- */
 .screen .card-content-wrapper {
   display: flex;
   align-items: center;
@@ -248,7 +232,6 @@
   color: var(--gray-text);
 }
 
-/* Правая часть карточки (инпуты) */
 .screen .view-10 {
   flex: 1; /* Та же пропорция, что и у заголовка */
 }
@@ -266,7 +249,6 @@
   height: 100%;
 }
 
-/* Контейнер для инпута */
 .screen .view-12 {
   display: flex;
   align-items: center;
@@ -280,7 +262,6 @@
   padding: 0 16px;
 }
 
-/* Подвал с итоговым количеством */
 .screen .frame-5 {
   display: flex;
   justify-content: flex-end;
@@ -297,12 +278,10 @@
   color: var(--gray-text);
 }
 
-/* Кнопка "Пересчитать" (скрыта по макету) */
 form > button.view-6 {
   display: none !important;
 }
 
-/* --- ХЕДЕР --- */
 .screen .header {
   position: fixed;
   top: 0;
@@ -335,7 +314,6 @@ form > button.view-6 {
   flex: 1;
 }
 
-/* --- АДАПТИВНОСТЬ --- */
 @media (max-width: 992px) {
   .screen .card-content-wrapper {
     flex-direction: column;

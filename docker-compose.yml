@@ -1,6 +1,6 @@
 # Общее для всех MinIO
 x-minio-common: &minio-common
-  image: minio/minio:latest
+  image: quay.io/minio/minio:RELEASE.2022-10-15T19-57-03Z
   command: server --console-address ":9001" http://minio{1...4}/data{1...2}
   environment:
     MINIO_ROOT_USER: minioadmin

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"shareholder-app/internal/app/repository" // Проверьте имя модуля
+	"shareholder-app/internal/app/repository"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -27,7 +27,6 @@ type DividendResult struct {
 	Dividend    float64
 }
 
-// GetShareholdersPage и GetShareholderPage не меняются.
 func (h *Handler) GetShareholdersPage(ctx *gin.Context) {
 	var shareholders []repository.Shareholder
 	var err error
@@ -65,7 +64,6 @@ func (h *Handler) GetShareholderPage(ctx *gin.Context) {
 	})
 }
 
-// ИЗМЕНЕНО: Логика GetRequestPage теперь чистая и правильная.
 func (h *Handler) GetRequestPage(ctx *gin.Context) {
 	totalProfitStr := ctx.DefaultQuery("total_profit", "1000000")
 	totalProfit, _ := strconv.ParseFloat(totalProfitStr, 64)
@@ -81,11 +79,9 @@ func (h *Handler) GetRequestPage(ctx *gin.Context) {
 	for i, item := range requestItems {
 		shareholder, _ := h.Repository.GetShareholder(item.ShareholderID)
 
-		// ИЗМЕНЕНО: Значения по умолчанию берутся напрямую из item.
 		coeff := item.Coefficient
 		fine := item.Fine
 		
-		// Если данные пришли из формы, перезаписываем их для перерасчета.
 		if len(coeffsStr) > i && len(finesStr) > i && len(idsStr) > i && idsStr[i] == strconv.Itoa(shareholder.ID) {
 			coeff, _ = strconv.ParseFloat(coeffsStr[i], 64)
 			fine, _ = strconv.ParseFloat(finesStr[i], 64)

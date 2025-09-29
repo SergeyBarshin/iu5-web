@@ -14,7 +14,6 @@ import (
 func StartServer() {
 	log.Println("Запуск сервера")
 
-	// Инициализируем репозиторий
 	repo, err := repository.NewRepository()
 	if err != nil {
 		logrus.Fatalf("Ошибка инициализации репозитория: %v", err)
@@ -22,14 +21,12 @@ func StartServer() {
 
 	handler := handler.NewHandler(repo)
 
-	// Создаем Gin-роутер
 	r := gin.Default()
 
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/static", "./resources")
 
 
-	// --- Маршруты (Endpoints) ---
 
 	// Главная страница со списком акционеров
 	r.GET("/shareholders", handler.GetShareholdersPage)
@@ -41,7 +38,6 @@ func StartServer() {
 	r.GET("/request", handler.GetRequestPage)
 
 
-	// Запускаем сервер на порту 8080
 	log.Println("Сервер успешно запущен на http://localhost:8080")
 	r.Run(":8080")
 	
