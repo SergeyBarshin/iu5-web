@@ -35,8 +35,7 @@ func StartServer() {
 	r.GET("/shareholder/:id", handler.GetShareholderPage)
 
 	// Страница "заявки" для расчета дивидендов
-	r.GET("/request", handler.GetRequestPage)
-
+	r.GET("/request/:id", handler.GetRequestPage)
 
 	log.Println("Сервер успешно запущен на http://localhost:8080")
 	r.Run(":8080")

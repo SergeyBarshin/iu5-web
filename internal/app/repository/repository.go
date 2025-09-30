@@ -53,22 +53,45 @@ func (r *Repository) GetShareholdersByName(name string) ([]Shareholder, error) {
 	return result, nil
 }
 
+type Request struct {
+	ID int
+}
 
 type RequestItem struct {
+	RequestID     int
 	ShareholderID int
-	Coefficient   float64 // Коэффициент корректировки доли
-	Fine          float64 // Сумма штрафов (руб)
+	Coefficient   float64
+	Fine          float64
+}
+
+var allRequests = []Request{
+	{ID: 1},
 }
 
 var allRequestItems = []RequestItem{
-	{ShareholderID: 1, Coefficient: 1.2, Fine: 1200},
-	{ShareholderID: 2, Coefficient: 1.0, Fine: 2410},
+	{RequestID: 1, ShareholderID: 1, Coefficient: 1.2, Fine: 1200},
+	{RequestID: 1, ShareholderID: 2, Coefficient: 1.0, Fine: 2410},
 }
 
-func (r *Repository) GetRequestItems() ([]RequestItem, error) {
-	return allRequestItems, nil
+func (r *Repository) GetRequest(id int) (Request, error) {
+	for _, req := range allRequests {
+		if req.ID == id {
+			return req, nil
+		}
+	}
+	return Request{}, fmt.Errorf("заявка с ID %d не найдена", id)
 }
 
-func (r *Repository) GetRequestItemsCount() (int, error) {
+func (r *Repository) GetRequestItemsByRequestID(requestID int) ([]RequestItem, error) {
+	var items []RequestItem
+	for _, item := range allRequestItems {
+		if item.RequestID == requestID {
+			items = append(items, item)
+		}
+	}
+	return items, nil
+}
+
+func (r *Repository) GetTotalRequestItemsCount() (int, error) {
 	return len(allRequestItems), nil
 }

@@ -1,12 +1,12 @@
-/* Экран материалов: базовая обертка страницы */
-.screen {
+/* Общая обертка страницы */
+.page-wrapper {
   background-color: var(--page-bg);
   display: block;
   width: 100%;
 }
 
-/* Внутренний контейнер: ширина 100% и отступ под фиксированный header */
-.screen .div {
+/* Внутренний контейнер с отступом под шапку */
+.page-wrapper .page-inner {
   background-color: var(--page-bg);
   width: 100%;
   min-height: calc(100vh - 76px);
@@ -14,8 +14,8 @@
   position: relative;
 }
 
-/* Основной контейнер контента: центрирование и максимальная ширина */
-.screen .body {
+/* Основной контент страницы */
+.page-wrapper .main-content {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -25,12 +25,12 @@
   margin: 0 auto;
 }
 
-/* Секция каталога материалов */
-.screen .catalog {
+/* Секция акционеров */
+.page-wrapper .shareholders-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 0;
   padding: 0;
   position: relative;
   align-self: stretch;
@@ -38,100 +38,68 @@
   flex: 0 0 auto;
 }
 
-/* Вариативный контейнер секции (служебная обертка) */
-.screen .view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  align-self: stretch;
+/* Заголовок секции */
+.page-wrapper .shareholders-section__header {
+  margin-bottom: 24px;
   width: 100%;
-  flex: 0 0 auto;
 }
 
-/* Заголовок страницы каталога */
-.screen .text-wrapper {
-  align-self: stretch;
+.page-wrapper .page-title {
   font-family: "Inter-Bold", Helvetica;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--black);
-  font-size: 48px;
+  font-size: 42px;
   text-align: center;
-  line-height: 56px;
-  position: relative;
+  line-height: 50px;
   letter-spacing: 0;
 }
 
-/* Строка поиска: контейнер */
-.screen .view-wrapper {
+/* Контейнер для формы поиска */
+.page-wrapper .search-container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 0;
-  position: relative;
-  align-self: stretch;
   width: 100%;
-  flex: 0 0 auto;
+  margin-bottom: 60px;
 }
 
-/* Поле поиска: визуальная обертка с рамкой и скруглением */
-.screen .overlap-group-wrapper {
+/* Форма поиска */
+.page-wrapper .search-form {
   position: relative;
   width: 100%;
-  max-width: 580px;
-  height: 52px;
+  max-width: 540px;
+  height: 48px;
   background-color: var(--white);
-  border-radius: 26px;
+  border-radius: 24px;
   border: 1px solid var(--gray-border);
 }
 
-/* Поле поиска: внутренности (иконка + ввод) */
-.screen .overlap-group {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.page-wrapper .search-form__inner {
   display: flex;
   align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
-/* Иконка поиска слева */
-.screen .image-fill {
+.page-wrapper .search-form__icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 18px;
+  padding: 0 16px;
 }
 
-.screen .component {
-  position: relative;
+.page-wrapper .search-form__icon {
   width: 20px;
   height: 20px;
 }
 
-.screen .container {
-  display: none;
-}
-
-.screen .text-wrapper-2 {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.screen .component-wrapper {
-  display: flex;
-  align-items: center;
-  padding: 0 18px 0 0;
-  height: 100%;
+.page-wrapper .search-form__input-wrapper {
   flex: 1;
+  height: 100%;
+  padding-right: 16px;
 }
 
-.screen .component-2 {
+.page-wrapper .search-form__input {
   background: transparent;
   border: none;
   outline: none;
@@ -139,192 +107,150 @@
   font-weight: 400;
   color: var(--black);
   font-size: 16px;
-  line-height: normal;
   width: 100%;
   height: 100%;
 }
 
-.screen .component-2::placeholder {
+.page-wrapper .search-form__input::placeholder {
   color: var(--gray-text);
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
-/* Сетка карточек материалов */
-.screen .view-2 {
+/* Сетка карточек акционеров */
+.page-wrapper .shareholders-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 60px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 72px 24px;
   width: 100%;
 }
 
-/* Карточка материала: контейнер */
-.screen .view-3 {
+/* Карточка акционера */
+.page-wrapper .shareholder-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  border-radius: 24px;
+  border-radius: 32px;
   background-color: var(--card-bg);
-  padding: 0 32px 32px;
+  padding: 0 20px 24px;
   text-align: center;
 }
 
-/* Изображение карточки: позиционирование для эффекта "сидения" */
-.screen .img {
-  position: relative;
-  width: 100%;
-  height: auto;
+/* Фото акционера */
+.page-wrapper .shareholder-card__photo-wrapper {
   margin-top: -70px;
   margin-bottom: 24px;
 }
 
-.screen .img img {
+.page-wrapper .shareholder-card__photo {
   height: 140px;
   width: auto;
   margin: 0 auto;
   object-fit: contain;
 }
 
-/* Тело карточки: внутренние отступы и вертикальный стек */
-.screen .body-2 {
+/* Тело карточки (текстовый контент) */
+.page-wrapper .shareholder-card__body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 12px;
-  position: relative;
-  align-self: stretch;
   width: 100%;
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.screen .div-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  align-self: stretch;
-  width: 100%;
-  flex: 0 0 auto;
 }
 
 /* Имя акционера */
-.screen .text-wrapper-3 {
+.page-wrapper .shareholder-card__name {
   font-family: "Inter-Bold", Helvetica;
   font-weight: 700;
-  font-size: 22px;
-  line-height: 30px;
-  position: relative;
-  align-self: stretch;
+  font-size: 20px;
+  line-height: 26px;
   color: var(--black);
   letter-spacing: 0;
-}
-
-/* Контейнер описания */
-.screen .view-4 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  align-self: stretch;
-  width: 100%;
-  min-height: 66px; /* для выравнивания карточек по высоте (3 строки) */
 }
 
 /* Краткое описание */
-.screen .text-wrapper-4 {
+.page-wrapper .shareholder-card__description {
   font-family: "Inter-Regular", Helvetica;
   font-weight: 400;
-  font-size: 15px;
-  line-height: 22px;
-  position: relative;
-  align-self: stretch;
+  font-size: 14px;
+  line-height: 20px;
   color: var(--gray-text);
   letter-spacing: 0;
 }
 
-.screen .frame {
-  display: none;
-}
-
-/* Блок доли в компании */
-.screen .mr-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  flex: 0 0 auto;
+/* Блок "Доля в компании" */
+.page-wrapper .shareholder-card__share-info {
   margin-top: 20px;
 }
 
-.screen .mr {
-  position: relative;
-  width: 100%;
-  font-family: "Inter-Regular", Helvetica;
+.page-wrapper .share-info__text {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.page-wrapper .share-info__label {
   font-weight: 400;
+  font-size: 15px;
   color: var(--gray-text);
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 22px;
 }
 
-.screen .span {
-  font-weight: 400;
-}
-
-.screen .text-wrapper-5 {
+.page-wrapper .share-info__value {
   font-family: "Inter-Bold", Helvetica;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   color: var(--black);
 }
 
-/* Контейнер кнопки */
-.screen .view-5 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  align-self: stretch;
+/* "Подвал" карточки с кнопкой */
+.page-wrapper .shareholder-card__footer {
+  margin-top: auto;
+  padding-top: 24px;
   width: 100%;
-  flex: 0 0 auto;
-  margin-top: 24px;
 }
 
 /* Кнопка "Подробнее" */
-.screen .view-6 {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 11px 24px;
-  position: relative;
-  flex: 0 0 auto;
-  background-color: var(--red);
+.page-wrapper .shareholder-card__details-btn {
+  width: 112px;
+  height: 40px;
   border-radius: 8px;
+  background-color: var(--red);
   border: none;
   transition: background-color 0.2s ease-in-out;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
-.screen .view-6:hover {
+.page-wrapper .shareholder-card__details-btn:hover {
   background-color: var(--red-hover);
 }
 
-/* Текст на кнопке */
-.screen .text {
-  width: fit-content;
+.page-wrapper .btn__text {
   font-family: "Inter-Regular", Helvetica;
   font-weight: 500;
   color: var(--white);
   font-size: 16px;
-  text-align: center;
   line-height: 22px;
   white-space: nowrap;
-  position: relative;
-  letter-spacing: 0;
 }
 
-/* Фиксированный хедер страницы */
-.screen .header {
+/* Класс для скрытия элементов доступным образом (для label) */
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* --- Фиксированная шапка и плавающая кнопка (без изменений в именах) --- */
+
+.page-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -335,44 +261,33 @@
   background-color: var(--black);
 }
 
-/* Контейнер содержимого в хедере */
-.screen .container-2 {
+.page-header__container {
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
   max-width: 1180px;
   height: 76px;
   align-items: center;
-  gap: 0;
   padding: 16px;
   margin: 0 auto;
 }
 
-/* Блок для логотипа/картинки в хедере */
-.screen .logo-image-wrapper {
+.page-header__logo {
   display: flex;
   height: 44px;
   align-items: center;
   justify-content: flex-start;
-  position: relative;
 }
 
-/* Изображение логотипа */
-.screen .logo-image {
-  position: relative;
+.logo-image {
   height: 24px;
   width: auto;
   object-fit: contain;
 }
 
-.screen .view-8 {
-  position: relative;
-  flex: 1;
-  flex-grow: 1;
-  height: 40px;
+.page-header__spacer {
+  flex: 1 1 auto;
 }
 
-/* Плавающая кнопка заявки в левом нижнем углу */
 .floating-cart {
   position: fixed;
   left: 24px;
@@ -389,13 +304,11 @@
   border: 1px solid var(--gray-border);
 }
 
-/* Иконка внутри плавающей кнопки */
 .floating-cart img {
   max-width: 40px;
   max-height: 40px;
 }
 
-/* Бейдж количества в заявке */
 .floating-cart .cart-badge {
   position: absolute;
   top: -8px;
@@ -412,41 +325,4 @@
   line-height: 24px;
   text-align: center;
   box-shadow: 0 0 0 2px var(--white);
-}
-
-/* Адаптив: планшеты и десктопы до 1200px */
-@media (max-width: 1200px) {
-  .screen .body {
-    padding: 60px 16px 40px;
-  }
-}
-
-/* Адаптив: Планшеты */
-@media (max-width: 992px) {
-  .screen .view-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 50px 20px;
-  }
-  .screen .text-wrapper {
-    font-size: 40px;
-    line-height: 48px;
-  }
-}
-
-/* Адаптив: мобильные устройства */
-@media (max-width: 768px) {
-  .screen .body {
-    padding: 40px 12px;
-  }
-  .screen .text-wrapper {
-    font-size: 32px;
-    line-height: 40px;
-  }
-  .screen .catalog {
-    gap: 30px;
-  }
-  .screen .view-2 {
-    grid-template-columns: 1fr;
-    gap: 50px;
-  }
 }

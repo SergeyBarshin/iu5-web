@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
-    <!-- Title страницы теперь имя акционера -->
     <title>{{ .shareholder.Name }}</title>
-    <!-- Стили оставляем старые -->
     <link rel="stylesheet" href="/static/styles/globals.css" />
     <link rel="stylesheet" href="/static/styles/shareholder.css" />
     <link
@@ -15,57 +13,55 @@
     />
   </head>
   <body>
-    <div class="screen">
-      <div class="div">
-        <div class="body">
-          <div class="view">
-            <div class="view-2">
-              <div class="view-wrapper">
-                <div class="div-wrapper">
-                  <!-- Главный заголовок - полное имя акционера -->
-                  <div class="text-wrapper">{{ .shareholder.Name }}</div>
-                </div>
-              </div>
-              <div class="container-wrapper">
-                <div class="container">
-                  <div class="div-wrapper">
-                    <!-- Описание осталось как есть -->
-                    <p class="p">{{ .shareholder.Description }}</p>
-                  </div>
-                  <div class="horizontal-divider-wrapper">
-                    <div class="horizontal-divider"></div>
-                  </div>
-                  <!-- Вместо массы и коэффициента выводим долю -->
-                  <p class="mr">
-                    <span class="span">Доля в компании:</span>
-                    <span class="text-wrapper-3">
-                      {{ .shareholder.Share }}%
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- Изображение акционера -->
-            <img
-              class="image"
-              src="{{ .shareholder.ImageURL }}"
-              alt="{{ .shareholder.Name }}"
-            />
-          </div>
-        </div>
-        <header class="header">
-          <div class="container-2">
-            <div class="logo-image-wrapper">
-              <a href="/shareholders"
-                ><img
+    <div class="page-wrapper">
+      <div class="page-inner">
+        <header class="page-header">
+          <div class="page-header__container">
+            <div class="page-header__logo">
+              <a href="/shareholders">
+                <img
                   class="logo-image"
                   src="http://localhost:8080/static/img/logo1.svg"
                   alt="Логотип"
-              /></a>
+                />
+              </a>
             </div>
-            <div class="view-8"></div>
+            <div class="page-header__spacer"></div>
           </div>
         </header>
+
+        <main class="main-content">
+          <section class="shareholder-profile">
+            <!-- Блок с текстовой информацией -->
+            <div class="shareholder-profile__info">
+              <header class="shareholder-profile__header">
+                <h1 class="shareholder-profile__name">
+                  {{ .shareholder.Name }}
+                </h1>
+              </header>
+              <div class="shareholder-profile__details">
+                <p class="shareholder-profile__description">
+                  {{ .shareholder.Description }}
+                </p>
+                <div class="shareholder-profile__divider"></div>
+                <p class="shareholder-profile__share-info">
+                  <span class="share-info__label">Доля в компании:</span>
+                  <span class="share-info__value">
+                    {{ .shareholder.Share }}%
+                  </span>
+                </p>
+              </div>
+            </div>
+            <!-- Блок с фотографией -->
+            <div class="shareholder-profile__photo-wrapper">
+              <img
+                class="shareholder-profile__photo"
+                src="{{ .shareholder.ImageURL }}"
+                alt="{{ .shareholder.Name }}"
+              />
+            </div>
+          </section>
+        </main>
       </div>
     </div>
   </body>

@@ -13,39 +13,48 @@
     />
   </head>
   <body>
-    <div class="screen">
-      <div class="div">
-        <main class="body">
-          <section class="catalog">
-            <header class="view">
-              <h1 class="text-wrapper">Акционеры</h1>
+    <div class="page-wrapper">
+      <div class="page-inner">
+        <header class="page-header">
+          <div class="page-header__container">
+            <div class="page-header__logo">
+              <a href="/shareholders">
+                <img
+                  class="logo-image"
+                  src="http://localhost:8080/static/img/logo1.svg"
+                  alt="Логотип"
+                />
+              </a>
+            </div>
+            <div class="page-header__spacer"></div>
+          </div>
+        </header>
+
+        <main class="main-content">
+          <section class="shareholders-section">
+            <header class="shareholders-section__header">
+              <h1 class="page-title">Акционеры</h1>
             </header>
-            <div class="view-wrapper">
-              <!-- ИЗМЕНЕНО: action теперь ведет на /shareholders -->
-              <form
-                class="overlap-group-wrapper"
-                action="/shareholders"
-                method="get"
-              >
-                <div class="overlap-group">
-                  <div class="image-fill">
+            <div class="search-container">
+              <form class="search-form" action="/shareholders" method="get">
+                <div class="search-form__inner">
+                  <div class="search-form__icon-wrapper">
                     <img
-                      class="component"
+                      class="search-form__icon"
                       src="http://localhost:8080/static/img/search.svg"
                       alt="Поиск"
                     />
                   </div>
-                  <div class="container">
-                    <label for="search-input" class="text-wrapper-2"
-                      >Поиск акционера...</label
-                    >
-                  </div>
-                  <div class="component-wrapper">
+                  <div class="search-form__input-wrapper">
+                    <!-- Для доступности оставляем скрытый label -->
+                    <label for="search-input" class="visually-hidden">
+                      Поиск акционера...
+                    </label>
                     <input
                       type="text"
                       id="search-input"
                       name="query"
-                      class="component-2"
+                      class="search-form__input"
                       placeholder="Поиск акционера..."
                       aria-label="Поиск акционера"
                       value="{{ .query }}"
@@ -54,35 +63,34 @@
                 </div>
               </form>
             </div>
-            <div class="view-2">
+            <div class="shareholders-grid">
               {{ range .shareholders }}
-              <article class="view-3">
-                <div class="img" role="img" aria-label="{{ .Name }}">
-                  <img src="{{ .ImageURL }}" alt="{{ .Name }}" />
+              <article class="shareholder-card">
+                <div class="shareholder-card__photo-wrapper">
+                  <img
+                    class="shareholder-card__photo"
+                    src="{{ .ImageURL }}"
+                    alt="{{ .Name }}"
+                  />
                 </div>
-                <div class="body-2">
-                  <div class="div-wrapper">
-                    <h2 class="text-wrapper-3">{{ .Name }}</h2>
-                  </div>
-                  <div class="div-wrapper">
-                    <div class="view-4">
-                      <p class="text-wrapper-4">{{ .Description }}</p>
-                      <div class="frame"></div>
-                    </div>
-                  </div>
-                  <div class="mr-wrapper">
-                    <p class="mr">
-                      <span class="span">Доля в компании:</span><br />
-                      <span class="text-wrapper-5"> {{ .Share }}% </span>
+                <div class="shareholder-card__body">
+                  <h2 class="shareholder-card__name">{{ .Name }}</h2>
+                  <p class="shareholder-card__description">
+                    {{ .Description }}
+                  </p>
+                  <div class="shareholder-card__share-info">
+                    <p class="share-info__text">
+                      <span class="share-info__label">Доля в компании:</span>
+                      <span class="share-info__value"> {{ .Share }}% </span>
                     </p>
                   </div>
-                  <div class="view-5">
+                  <div class="shareholder-card__footer">
                     <a
-                      class="view-6"
+                      class="shareholder-card__details-btn"
                       href="/shareholder/{{ .ID }}"
                       aria-label="Подробнее о {{ .Name }}"
                     >
-                      <span class="text">Подробнее</span>
+                      <span class="btn__text">Подробнее</span>
                     </a>
                   </div>
                 </div>
@@ -91,26 +99,13 @@
             </div>
           </section>
         </main>
-        <header class="header">
-          <div class="container-2">
-            <div class="logo-image-wrapper">
-              <a href="/shareholders"
-                ><img
-                  class="logo-image"
-                  src="http://localhost:8080/static/img/logo1.svg"
-                  alt="Логотип"
-              /></a>
-            </div>
-            <div class="view-8"></div>
-          </div>
-        </header>
       </div>
     </div>
-    <a href="/request" class="floating-cart" aria-label="Перейти в заявку">
+    <a href="/request/1" class="floating-cart" aria-label="Перейти в заявку">
       <img src="http://localhost:8080/static/img/cart1.svg" alt="Заявка" />
-      <span class="cart-badge" aria-label="Количество в заявке"
-        >{{ .Count }}</span
-      >
+      <span class="cart-badge" aria-label="Количество в заявке">
+        {{ .Count }}
+      </span>
     </a>
   </body>
 </html>

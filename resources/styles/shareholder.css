@@ -1,21 +1,23 @@
-/* Базовая обертка страницы */
-.screen {
+/* Общая обертка страницы */
+.page-wrapper {
   background-color: var(--page-bg);
   display: block;
   width: 100%;
 }
 
-.screen .div {
+/* Внутренний контейнер с отступом под шапку */
+.page-wrapper .page-inner {
   background-color: var(--page-bg);
   width: 100%;
   min-height: calc(100vh - 76px);
   padding-top: 76px;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: center; /* Центрируем контент по вертикали */
 }
 
-.screen .body {
+/* Основной контент страницы */
+.page-wrapper .main-content {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -25,41 +27,25 @@
   margin: 0 auto;
 }
 
-.screen .view {
+/* Секция профиля акционера */
+.page-wrapper .shareholder-profile {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 300px; /* Сетка: текст слева, фото справа */
   align-items: center;
   gap: 60px;
-  position: relative;
   width: 100%;
 }
 
-.screen .view-2 {
+/* Блок с текстовой информацией */
+.page-wrapper .shareholder-profile__info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
-  position: relative;
 }
 
-.screen .view-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  width: 100%;
-}
-
-.screen .div-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  width: 100%;
-}
-
-.screen .text-wrapper {
-  position: relative;
+/* Заголовок с именем */
+.page-wrapper .shareholder-profile__name {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 700;
   color: var(--black);
@@ -68,49 +54,36 @@
   line-height: 52px;
 }
 
-.screen .container-wrapper {
-  display: flex;
-  align-items: flex-start;
-  position: relative;
-  width: 100%;
-}
-
-.screen .container {
+/* Контейнер с детальной информацией */
+.page-wrapper .shareholder-profile__details {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex: 1;
   gap: 24px;
   width: 100%;
 }
 
-.screen .p {
-  align-self: stretch;
+/* Описание */
+.page-wrapper .shareholder-profile__description {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
   font-size: 18px;
   line-height: 28px;
-  position: relative;
-  margin: 0;
   color: var(--gray-text);
   letter-spacing: 0;
   max-width: 580px;
 }
 
-.screen .horizontal-divider-wrapper {
+/* Разделитель */
+.page-wrapper .shareholder-profile__divider {
   width: 100%;
   max-width: 580px;
-}
-
-.screen .horizontal-divider {
-  position: relative;
-  width: 100%;
   height: 1px;
   background-color: var(--red);
 }
 
-.screen .mr {
-  position: relative;
+/* Блок "Доля в компании" */
+.page-wrapper .shareholder-profile__share-info {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
   color: var(--gray-text);
@@ -119,28 +92,34 @@
   line-height: 24px;
 }
 
-.screen .span {
+.page-wrapper .share-info__label {
   font-weight: 400;
 }
 
-.screen .text-wrapper-3 {
+.page-wrapper .share-info__value {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 700;
   color: var(--black);
   margin-left: 8px;
 }
 
-.screen .image {
-  position: relative;
+/* Контейнер для фото */
+.page-wrapper .shareholder-profile__photo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Фото акционера */
+.page-wrapper .shareholder-profile__photo {
   width: 100%;
   max-width: 250px;
   height: auto;
   object-fit: contain;
-  justify-self: center;
 }
 
-/* Фиксированный хедер */
-.screen .header {
+/* --- Фиксированная шапка (используем те же классы для консистентности) --- */
+.page-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -151,8 +130,7 @@
   background-color: var(--black);
 }
 
-/* Контейнер хедера */
-.screen .container-2 {
+.page-header__container {
   display: flex;
   width: 100%;
   max-width: 1180px;
@@ -162,61 +140,59 @@
   margin: 0 auto;
 }
 
-.screen .logo-image-wrapper {
+.page-header__logo {
   display: flex;
   height: 100%;
   align-items: center;
 }
 
-.screen .logo-image {
-  position: relative;
+.logo-image {
   height: 24px;
   width: auto;
   object-fit: contain;
 }
 
-.screen .view-3 {
+.page-header__spacer {
   flex: 1;
 }
 
-/* Адаптивность */
+/* --- Адаптивность --- */
 @media (max-width: 992px) {
-  .screen .view {
+  .page-wrapper .shareholder-profile {
     grid-template-columns: 1fr; /* Переключаемся в одну колонку */
     gap: 40px;
     text-align: center; /* Центрируем текст на мобильных */
   }
 
-  .screen .view-2 {
+  .page-wrapper .shareholder-profile__info {
     align-items: center; /* Центрируем все текстовые блоки */
     order: 2; /* Текст идет после фото */
   }
 
-  .screen .p {
+  .page-wrapper .shareholder-profile__description {
     max-width: 100%;
   }
 
-  .screen .horizontal-divider-wrapper {
+  .page-wrapper .shareholder-profile__divider {
     margin-left: auto;
     margin-right: auto;
   }
 
-  .screen .image {
+  .page-wrapper .shareholder-profile__photo-wrapper {
     order: 1; /* Фото идет первым */
-    justify-self: center; /* Центрируем фото */
   }
 }
 
 @media (max-width: 768px) {
-  .screen .body {
+  .page-wrapper .main-content {
     padding: 40px 12px;
   }
-  .screen .text-wrapper {
+  .page-wrapper .shareholder-profile__name {
     font-size: 32px;
     line-height: 40px;
   }
-  .screen .p,
-  .screen .mr {
+  .page-wrapper .shareholder-profile__description,
+  .page-wrapper .shareholder-profile__share-info {
     font-size: 16px;
     line-height: 24px;
   }

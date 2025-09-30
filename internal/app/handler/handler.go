@@ -39,7 +39,9 @@ func (h *Handler) GetShareholdersPage(ctx *gin.Context) {
 	if err != nil {
 		logrus.Errorf("Ошибка: %v", err)
 	}
-	count, _ := h.Repository.GetRequestItemsCount()
+
+	count, _ := h.Repository.GetTotalRequestItemsCount()
+
 	ctx.HTML(http.StatusOK, "index.html", gin.H{
 		"shareholders": shareholders,
 		"query":        searchQuery,
@@ -63,14 +65,27 @@ func (h *Handler) GetShareholderPage(ctx *gin.Context) {
 		"shareholder": shareholder,
 	})
 }
-
 func (h *Handler) GetRequestPage(ctx *gin.Context) {
-	totalProfitStr := ctx.DefaultQuery("total_profit", "1000000")
+	// id заявки из URL
+	idStr := ctx.Param("id")
+	requestID, err := strconv.Atoi(idStr)
+	if err != nil {
+		ctx.String(http.StatusBadRequest, "Некорректный ID заявки")
+		return
+	}
+
+	// существует ли такая заявка
+	_, err = h.Repository.GetRequest(requestID)
+	if err != nil {
+		ctx.String(http.StatusNotFound, "Заявка не найдена")
+		return
+	}
+
+	totalProfitStr := ctx.DefaultQuery("total_profit", "10000")
 	totalProfit, _ := strconv.ParseFloat(totalProfitStr, 64)
 
-	requestItems, _ := h.Repository.GetRequestItems()
-	
-	// Данные из формы для перерасчета
+	requestItems, _ := h.Repository.GetRequestItemsByRequestID(requestID)
+
 	coeffsStr := ctx.QueryArray("coeffs")
 	finesStr := ctx.QueryArray("fines")
 	idsStr := ctx.QueryArray("ids")
@@ -96,12 +111,13 @@ func (h *Handler) GetRequestPage(ctx *gin.Context) {
 			Dividend:    dividend,
 		})
 	}
-
-	count, _ := h.Repository.GetRequestItemsCount()
+	
+	shareholdersCount := len(requestItems)
 
 	ctx.HTML(http.StatusOK, "request.html", gin.H{
+		"requestID":         requestID,
 		"results":           results,
 		"totalProfit":       totalProfit,
-		"shareholdersCount": count,
+		"shareholdersCount": shareholdersCount,
 	})
 }

@@ -1,18 +1,17 @@
-.screen {
+/* Общие стили страницы */
+.page-wrapper {
   background-color: var(--page-bg);
   display: block;
   width: 100%;
 }
-
-.screen .div {
+.page-inner {
   background-color: var(--page-bg);
   width: 100%;
   min-height: calc(100vh - 76px);
   position: relative;
   padding-top: 76px;
 }
-
-.screen .body {
+.main-content {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -22,146 +21,109 @@
   padding: 60px 16px;
   margin: 0 auto;
 }
-
-.screen .frame {
-  display: none;
+.page-header-section {
+  display: block; /* Скрыто в макете, но оставляем для семантики */
+}
+.page-title {
+  /* Стили для заголовка */
 }
 
-.screen .view {
+/* Секция ввода общей прибыли */
+.profit-input-section {
   display: flex;
   align-items: center;
+  gap: 16px;
   padding: 16px 24px;
   width: 100%;
   background-color: var(--card-bg);
   border-radius: 24px;
 }
-
-.screen .div-2 {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-}
-
-.screen .view-2 {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 16px;
-}
-
-.screen .div-wrapper {
-  flex-shrink: 0;
-}
-
-.screen .text-wrapper-2 {
+.profit-input__label {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   color: var(--gray-text);
+  flex-shrink: 0;
 }
-
-.screen .view-wrapper {
+.profit-input__control {
   flex: 1;
-  flex-grow: 1;
-  height: auto;
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-}
-
-.screen .view-3 {
+  background-color: var(--white);
+  border-radius: 50px;
+  min-height: 48px;
   display: flex;
-  width: 100%;
-  padding: 0;
+  align-items: center;
+  padding: 0 16px;
 }
-
-.screen input[type="text"] {
-  background: transparent;
-  border: none;
-  outline: none;
+.profit-input__field {
   width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 500;
   color: var(--black);
   font-size: 16px;
-  line-height: 24px;
-}
-.screen input[type="text"].text-wrapper-2 {
-  color: var(--black);
 }
 
-/* Секция со списком акционеров */
-.screen .view-4 {
+/* Список для расчета */
+.calculation-list {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-.screen .view-5 {
-  display: flex;
-  flex-direction: column;
   gap: 8px;
-  flex: 1;
 }
 
-/* Контейнер для заголовков таблицы */
-.screen .frame-wrapper {
+/* Заголовок списка */
+.calculation-list__header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
   padding: 0 24px;
   width: 100%;
 }
-
-.screen .frame-2 {
+.calculation-list__header-group {
   display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 24px;
 }
-
-.screen .frame-2 .frame-3:first-child {
-  flex: 1.5;
+.calculation-list__header-group--info {
+  flex: 1.5; /* Пропорция для левой колонки */
 }
-
-.screen .text-wrapper-3 {
-  font-family: "Inter", Helvetica, sans-serif;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  color: var(--black);
-}
-
-.screen .frame-4 {
-  flex: 1;
+.calculation-list__header-group--controls {
+  flex: 1; /* Пропорция для правой группы */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-
-.screen .text-wrapper-4 {
+.calculation-list__header-label {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
   color: var(--gray-text);
 }
+.calculation-list__header-group--info .calculation-list__header-label {
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--black);
+}
 
-.screen .view-6 {
+/* Контейнер для элементов списка */
+.calculation-list__items {
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 100%;
 }
 
-.screen .element {
+/* Отдельный элемент (карточка) в списке */
+.calculation-item {
   display: block;
   padding: 24px;
   width: 100%;
   background-color: var(--card-bg);
   border-radius: 24px;
 }
-
-.screen .card-content-wrapper {
+.calculation-item__inner {
   display: flex;
   align-items: center;
   gap: 24px;
@@ -169,108 +131,108 @@
 }
 
 /* Левая часть карточки (инфо об акционере) */
-.screen .view-7 {
+.calculation-item__info {
   flex: 1.5; /* Та же пропорция, что и у заголовка */
   display: flex;
   align-items: center;
   gap: 24px;
 }
-
-.screen .image-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.calculation-item__photo {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
   flex-shrink: 0;
 }
-
-.screen .image {
-  position: relative;
-  width: 80px;
-  height: auto;
-  object-fit: contain;
-}
-
-.screen .view-8 {
+.calculation-item__text-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
-
-.screen .view-9 {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.screen .text-wrapper-5 {
+.calculation-item__name {
   font-family: "Inter", Helvetica, sans-serif;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 24px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
   color: var(--black);
 }
-
-.screen p {
-  font-family: "Inter", Helvetica, sans-serif;
-  font-weight: 400;
+.calculation-item__share {
   font-size: 14px;
   line-height: 20px;
-  color: var(--gray-text);
+  color: var(--black);
+  background-color: #f7f8fa;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
   margin: 0;
+  align-self: flex-start;
 }
-
-.screen .background-border {
-  margin-top: 8px;
-}
-
-.screen .text {
-  font-family: "Inter", Helvetica, sans-serif;
-  font-weight: 400;
+.calculation-item__description {
   font-size: 14px;
   line-height: 20px;
   color: var(--gray-text);
 }
 
-.screen .view-10 {
+/* Правая часть карточки (поля ввода) */
+.calculation-item__controls {
   flex: 1; /* Та же пропорция, что и у заголовка */
-}
-
-.screen .view-10 .div-2 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-
-.screen .view-11,
-.screen .view-12,
-.screen .view-13 {
+.calculation-item__input-wrapper {
   width: 100%;
-  height: 100%;
-}
-
-.screen .view-12 {
   display: flex;
   align-items: center;
-  height: 48px;
-  background-color: var(--white);
-  border-radius: 12px;
-  border: 1px solid var(--gray-border);
-}
-
-.screen .view-13 {
+  min-height: 48px;
+  border-radius: 50px;
+  background-color: var(--page-bg);
   padding: 0 16px;
 }
+.calculation-item__input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: "Inter", Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--black);
+}
+.calculation-item__input[readonly] {
+  color: var(--gray-text);
+}
 
-.screen .frame-5 {
+/* Кнопка отправки формы */
+.dividend-form__submit-btn {
+  display: block;
+  width: 200px;
+  height: 48px;
+  margin: 20px auto 0;
+  border-radius: 8px;
+  background-color: var(--red);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.dividend-form__submit-btn:hover {
+  background-color: var(--red-hover);
+}
+.dividend-form__submit-btn .btn__text {
+  color: var(--white);
+  font-family: "Inter", Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* Итоги */
+.calculation-summary {
   display: flex;
   justify-content: flex-end;
   padding: 0 24px;
   width: 100%;
-  margin-top: 16px;
 }
-
-.screen .text-wrapper-7 {
+.calculation-summary__text {
   font-family: "Inter", Helvetica, sans-serif;
   font-weight: 400;
   font-size: 16px;
@@ -278,11 +240,9 @@
   color: var(--gray-text);
 }
 
-form > button.view-6 {
-  display: none !important;
-}
-
-.screen .header {
+/* --- Шапка и Адаптивность --- */
+/* (Используются те же классы, что и на предыдущих страницах, для консистентности) */
+.page-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -292,8 +252,7 @@ form > button.view-6 {
   height: 76px;
   background-color: var(--black);
 }
-
-.screen .container {
+.page-header__container {
   display: flex;
   width: 100%;
   max-width: 1180px;
@@ -302,33 +261,33 @@ form > button.view-6 {
   padding: 0 16px;
   margin: 0 auto;
 }
-
-.screen .logo-image {
-  position: relative;
-  height: 48px;
+.page-header__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-image {
+  height: 24px;
   width: auto;
   object-fit: contain;
 }
-
-.screen .view-15 {
+.page-header__spacer {
   flex: 1;
 }
 
 @media (max-width: 992px) {
-  .screen .card-content-wrapper {
+  .calculation-list__header {
+    display: none; /* Скрываем заголовки на мобильных */
+  }
+  .calculation-item__inner {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
   }
-  .screen .frame-wrapper {
-    display: none; /* Скрываем заголовки на мобильных */
-  }
-
-  .screen .element {
+  .calculation-item {
     padding: 16px;
   }
-
-  .screen .view-7 {
+  .calculation-item__info {
     flex-direction: column;
     align-items: flex-start;
   }

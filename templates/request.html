@@ -13,170 +13,142 @@
     />
   </head>
   <body>
-    <div class="screen">
-      <div class="div">
-        <main class="body">
-          <section class="frame">
-            <h1 class="text-wrapper">Расчет дивидендов:</h1>
-          </section>
+    <div class="page-wrapper">
+      <div class="page-inner">
+        <header class="page-header">
+          <div class="page-header__container">
+            <div class="page-header__logo">
+              <a href="/shareholders">
+                <img
+                  class="logo-image"
+                  src="http://localhost:8080/static/img/logo1.svg"
+                  alt="Логотип"
+                />
+              </a>
+            </div>
+            <div class="page-header__spacer"></div>
+          </div>
+        </header>
 
-          <!-- Форма теперь оборачивает и поле прибыли, и список акционеров -->
-          <form action="/request" method="get">
-            <section class="view">
-              <div class="div-2">
-                <div class="view-2">
-                  <div class="div-wrapper">
-                    <label class="text-wrapper-2" for="total-profit"
-                      >Итоговая прибыль компании (руб):</label
-                    >
-                  </div>
-                  <div class="view-wrapper">
-                    <div class="view-3">
-                      <input
-                        type="text"
-                        id="total-profit"
-                        name="total_profit"
-                        class="text-wrapper-2"
-                        value="{{ .totalProfit }}"
+        <main class="main-content">
+          <header class="page-header-section">
+            <h1 class="page-title">Расчет дивидендов:</h1>
+          </header>
+
+          <form
+            class="dividend-form"
+            action="/request/{{ .requestID }}"
+            method="get"
+          >
+            <section class="profit-input-section">
+              <label class="profit-input__label" for="total-profit"
+                >Итоговая прибыль компании (руб):</label
+              >
+              <div class="profit-input__control">
+                <input
+                  type="text"
+                  id="total-profit"
+                  name="total_profit"
+                  class="profit-input__field"
+                  value="{{ .totalProfit }}"
+                />
+              </div>
+            </section>
+
+            <section class="calculation-list">
+              <header class="calculation-list__header">
+                <div
+                  class="calculation-list__header-group calculation-list__header-group--info"
+                >
+                  <h2 class="calculation-list__header-label">Акционер:</h2>
+                </div>
+                <div
+                  class="calculation-list__header-group calculation-list__header-group--controls"
+                >
+                  <span class="calculation-list__header-label"
+                    >Коэф. корректировки:</span
+                  >
+                  <span class="calculation-list__header-label"
+                    >Сумма штрафов (руб):</span
+                  >
+                  <span class="calculation-list__header-label"
+                    >Итоговая прибыль (руб):</span
+                  >
+                </div>
+              </header>
+
+              <div class="calculation-list__items">
+                {{ range .results }}
+                <article class="calculation-item">
+                  <input
+                    type="hidden"
+                    name="ids"
+                    value="{{ .Shareholder.ID }}"
+                  />
+
+                  <div class="calculation-item__inner">
+                    <div class="calculation-item__info">
+                      <img
+                        class="calculation-item__photo"
+                        src="{{ .Shareholder.ImageURL }}"
+                        alt="{{ .Shareholder.Name }}"
                       />
+                      <div class="calculation-item__text-content">
+                        <h3 class="calculation-item__name">
+                          {{ .Shareholder.Name }}
+                        </h3>
+                        <p class="calculation-item__share">
+                          <strong>Доля в компании:</strong>
+                          {{ .Shareholder.Share }}%
+                        </p>
+                        <p class="calculation-item__description">
+                          {{ .Shareholder.Description }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="calculation-item__controls">
+                      <div class="calculation-item__input-wrapper">
+                        <input
+                          type="text"
+                          name="coeffs"
+                          class="calculation-item__input"
+                          value="{{ .Coefficient }}"
+                        />
+                      </div>
+                      <div class="calculation-item__input-wrapper">
+                        <input
+                          type="text"
+                          name="fines"
+                          class="calculation-item__input"
+                          value="{{ .Fine }}"
+                        />
+                      </div>
+                      <div class="calculation-item__input-wrapper">
+                        <input
+                          type="text"
+                          class="calculation-item__input"
+                          value='{{ printf "%.2f" .Dividend }}'
+                          readonly
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
+                </article>
+                {{ end }}
               </div>
             </section>
 
-            <section class="view-4">
-              <div class="view-5">
-                <div class="frame-wrapper">
-                  <div class="frame-2">
-                    <div class="frame-3">
-                      <h2 class="text-wrapper-3">Акционер:</h2>
-                    </div>
-                    <div class="frame-4">
-                      <!-- Новые заголовки колонок -->
-                      <div class="frame-3">
-                        <span class="text-wrapper-4">Коэф. корректировки:</span>
-                      </div>
-                      <div class="frame-3">
-                        <span class="text-wrapper-4">Сумма штрафов (руб):</span>
-                      </div>
-                      <div class="frame-3">
-                        <span class="text-wrapper-4"
-                          >Итоговая прибыль (руб):</span
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="view-6">
-                  <!-- Перебираем результаты -->
-                  {{ range .results }}
-                  <article class="element">
-                    <!-- Скрытое поле для передачи ID акционера -->
-                    <input
-                      type="hidden"
-                      name="ids"
-                      value="{{ .Shareholder.ID }}"
-                    />
-
-                    <div class="card-content-wrapper">
-                      <div class="view-7">
-                        <div class="image-wrapper">
-                          <img
-                            class="image"
-                            src="{{ .Shareholder.ImageURL }}"
-                            alt="{{ .Shareholder.Name }}"
-                          />
-                        </div>
-                        <div class="view-8">
-                          <div class="view-9">
-                            <h3 class="text-wrapper-5">
-                              {{ .Shareholder.Name }}
-                            </h3>
-                            <p>Доля в компании: {{ .Shareholder.Share }}%</p>
-                          </div>
-                          <div class="background-border">
-                            <p class="text">{{ .Shareholder.Description }}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="view-10">
-                        <div class="div-2">
-                          <!-- Поле для Коэффициента -->
-                          <div class="view-11">
-                            <div class="view-12">
-                              <div class="view-13">
-                                <input
-                                  type="text"
-                                  name="coeffs"
-                                  class="text-wrapper-2"
-                                  value="{{ .Coefficient }}"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <!-- Поле для Штрафов -->
-                          <div class="view-11">
-                            <div class="view-12">
-                              <div class="view-13">
-                                <input
-                                  type="text"
-                                  name="fines"
-                                  class="text-wrapper-2"
-                                  value="{{ .Fine }}"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <!-- Поле для Итоговой прибыли (только для чтения) -->
-                          <div class="view-11">
-                            <div class="view-12">
-                              <div class="view-13">
-                                <input type="text" class="text-wrapper-2"
-                                value="{{ printf "%.2f" .Dividend }}" readonly
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                  {{ end }}
-                </div>
-              </div>
-            </section>
-
-            <!-- Кнопка для отправки всей формы -->
-            <button
-              type="submit"
-              class="view-6"
-              style="margin: 20px auto; display: block; width: 200px"
-            >
-              <span class="text">Пересчитать</span>
+            <button type="submit" class="dividend-form__submit-btn">
+              <span class="btn__text">Пересчитать</span>
             </button>
           </form>
-          <!-- Закрываем форму -->
 
-          <footer class="frame-5">
-            <p class="text-wrapper-7">
+          <footer class="calculation-summary">
+            <p class="calculation-summary__text">
               Акционеров в заявке: {{ .shareholdersCount }}
             </p>
           </footer>
         </main>
-        <header class="header">
-          <div class="container-2">
-            <div class="logo-image-wrapper">
-              <a href="/shareholders"
-                ><img
-                  class="logo-image"
-                  src="http://localhost:8080/static/img/logo1.svg"
-                  alt="Логотип"
-              /></a>
-            </div>
-            <div class="view-8"></div>
-          </div>
-        </header>
       </div>
     </div>
   </body>
