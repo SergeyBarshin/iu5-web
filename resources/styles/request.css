@@ -1,4 +1,3 @@
-/* Общие стили страницы */
 .page-wrapper {
   background-color: var(--page-bg);
   display: block;
@@ -22,13 +21,11 @@
   margin: 0 auto;
 }
 .page-header-section {
-  display: block; /* Скрыто в макете, но оставляем для семантики */
+  display: block;
 }
 .page-title {
-  /* Стили для заголовка */
 }
 
-/* Секция ввода общей прибыли */
 .profit-input-section {
   display: flex;
   align-items: center;
@@ -74,7 +71,6 @@
   gap: 8px;
 }
 
-/* Заголовок списка */
 .calculation-list__header {
   display: flex;
   align-items: center;
@@ -86,10 +82,10 @@
   display: flex;
 }
 .calculation-list__header-group--info {
-  flex: 1.5; /* Пропорция для левой колонки */
+  flex: 1.5;
 }
 .calculation-list__header-group--controls {
-  flex: 1; /* Пропорция для правой группы */
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -107,7 +103,6 @@
   color: var(--black);
 }
 
-/* Контейнер для элементов списка */
 .calculation-list__items {
   display: flex;
   flex-direction: column;
@@ -115,7 +110,6 @@
   width: 100%;
 }
 
-/* Отдельный элемент (карточка) в списке */
 .calculation-item {
   display: block;
   padding: 24px;
@@ -130,9 +124,8 @@
   width: 100%;
 }
 
-/* Левая часть карточки (инфо об акционере) */
 .calculation-item__info {
-  flex: 1.5; /* Та же пропорция, что и у заголовка */
+  flex: 1.5;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -173,9 +166,8 @@
   color: var(--gray-text);
 }
 
-/* Правая часть карточки (поля ввода) */
 .calculation-item__controls {
-  flex: 1; /* Та же пропорция, что и у заголовка */
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -203,7 +195,6 @@
   color: var(--gray-text);
 }
 
-/* Кнопка отправки формы */
 .dividend-form__submit-btn {
   display: block;
   width: 200px;
@@ -225,7 +216,6 @@
   font-size: 16px;
 }
 
-/* Итоги */
 .calculation-summary {
   display: flex;
   justify-content: flex-end;

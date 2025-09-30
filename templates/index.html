@@ -23,6 +23,7 @@
                   class="logo-image"
                   src="http://localhost:8080/static/img/logo1.svg"
                   alt="Логотип"
+                  style="width: 64px; height: auto"
                 />
               </a>
             </div>
@@ -53,11 +54,11 @@
                     <input
                       type="text"
                       id="search-input"
-                      name="query"
+                      name="name"
                       class="search-form__input"
                       placeholder="Поиск акционера..."
                       aria-label="Поиск акционера"
-                      value="{{ .query }}"
+                      value="{{ .name }}"
                     />
                   </div>
                 </div>
@@ -101,7 +102,11 @@
         </main>
       </div>
     </div>
-    <a href="/request/1" class="floating-cart" aria-label="Перейти в заявку">
+    <a
+      href="/dividend-calculation/1"
+      class="floating-cart"
+      aria-label="Перейти к расчету дивидендов"
+    >
       <img src="http://localhost:8080/static/img/cart1.svg" alt="Заявка" />
       <span class="cart-badge" aria-label="Количество в заявке">
         {{ .Count }}

@@ -37,7 +37,7 @@
 
           <form
             class="dividend-form"
-            action="/request/{{ .requestID }}"
+            action="/dividend-calculation/{{ .requestID }}"
             method="get"
           >
             <section class="profit-input-section">
@@ -48,7 +48,7 @@
                 <input
                   type="text"
                   id="total-profit"
-                  name="total_profit"
+                  name="company_profit"
                   class="profit-input__field"
                   value="{{ .totalProfit }}"
                 />
@@ -82,7 +82,7 @@
                 <article class="calculation-item">
                   <input
                     type="hidden"
-                    name="ids"
+                    name="shareholder_id"
                     value="{{ .Shareholder.ID }}"
                   />
 
@@ -110,7 +110,7 @@
                       <div class="calculation-item__input-wrapper">
                         <input
                           type="text"
-                          name="coeffs"
+                          name="adjustment_coefficient"
                           class="calculation-item__input"
                           value="{{ .Coefficient }}"
                         />
@@ -118,7 +118,7 @@
                       <div class="calculation-item__input-wrapper">
                         <input
                           type="text"
-                          name="fines"
+                          name="shareholder_fine"
                           class="calculation-item__input"
                           value="{{ .Fine }}"
                         />

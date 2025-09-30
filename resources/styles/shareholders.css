@@ -1,11 +1,9 @@
-/* Общая обертка страницы */
 .page-wrapper {
   background-color: var(--page-bg);
   display: block;
   width: 100%;
 }
 
-/* Внутренний контейнер с отступом под шапку */
 .page-wrapper .page-inner {
   background-color: var(--page-bg);
   width: 100%;
@@ -14,7 +12,6 @@
   position: relative;
 }
 
-/* Основной контент страницы */
 .page-wrapper .main-content {
   display: flex;
   flex-direction: column;
@@ -25,7 +22,6 @@
   margin: 0 auto;
 }
 
-/* Секция акционеров */
 .page-wrapper .shareholders-section {
   display: flex;
   flex-direction: column;
@@ -38,7 +34,6 @@
   flex: 0 0 auto;
 }
 
-/* Заголовок секции */
 .page-wrapper .shareholders-section__header {
   margin-bottom: 24px;
   width: 100%;
@@ -54,7 +49,6 @@
   letter-spacing: 0;
 }
 
-/* Контейнер для формы поиска */
 .page-wrapper .search-container {
   display: flex;
   justify-content: center;
@@ -62,7 +56,6 @@
   margin-bottom: 60px;
 }
 
-/* Форма поиска */
 .page-wrapper .search-form {
   position: relative;
   width: 100%;
@@ -116,7 +109,6 @@
   opacity: 0.7;
 }
 
-/* Сетка карточек акционеров */
 .page-wrapper .shareholders-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -124,7 +116,6 @@
   width: 100%;
 }
 
-/* Карточка акционера */
 .page-wrapper .shareholder-card {
   display: flex;
   flex-direction: column;
@@ -136,7 +127,6 @@
   text-align: center;
 }
 
-/* Фото акционера */
 .page-wrapper .shareholder-card__photo-wrapper {
   margin-top: -70px;
   margin-bottom: 24px;
@@ -149,7 +139,6 @@
   object-fit: contain;
 }
 
-/* Тело карточки (текстовый контент) */
 .page-wrapper .shareholder-card__body {
   flex-grow: 1;
   display: flex;
@@ -159,7 +148,6 @@
   width: 100%;
 }
 
-/* Имя акционера */
 .page-wrapper .shareholder-card__name {
   font-family: "Inter-Bold", Helvetica;
   font-weight: 700;
@@ -169,7 +157,6 @@
   letter-spacing: 0;
 }
 
-/* Краткое описание */
 .page-wrapper .shareholder-card__description {
   font-family: "Inter-Regular", Helvetica;
   font-weight: 400;
@@ -179,7 +166,6 @@
   letter-spacing: 0;
 }
 
-/* Блок "Доля в компании" */
 .page-wrapper .shareholder-card__share-info {
   margin-top: 20px;
 }
@@ -239,7 +225,6 @@
   white-space: nowrap;
 }
 
-/* Класс для скрытия элементов доступным образом (для label) */
 .visually-hidden {
   position: absolute;
   left: -9999px;
@@ -247,8 +232,6 @@
   height: 1px;
   overflow: hidden;
 }
-
-/* --- Фиксированная шапка и плавающая кнопка (без изменений в именах) --- */
 
 .page-header {
   position: fixed;

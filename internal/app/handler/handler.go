@@ -27,27 +27,27 @@ type DividendResult struct {
 	Dividend    float64
 }
 
+
 func (h *Handler) GetShareholdersPage(ctx *gin.Context) {
 	var shareholders []repository.Shareholder
 	var err error
-	searchQuery := ctx.Query("query")
-	if searchQuery == "" {
+	shareholderName := ctx.Query("name")
+	if shareholderName == "" {
 		shareholders, err = h.Repository.GetShareholders()
 	} else {
-		shareholders, err = h.Repository.GetShareholdersByName(searchQuery)
+		shareholders, err = h.Repository.GetShareholdersByName(shareholderName)
 	}
 	if err != nil {
 		logrus.Errorf("Ошибка: %v", err)
 	}
-
 	count, _ := h.Repository.GetTotalRequestItemsCount()
-
 	ctx.HTML(http.StatusOK, "index.html", gin.H{
 		"shareholders": shareholders,
-		"query":        searchQuery,
+		"name":         shareholderName,
 		"Count":        count,
 	})
 }
+
 
 func (h *Handler) GetShareholderPage(ctx *gin.Context) {
 	idStr := ctx.Param("id")
@@ -65,8 +65,9 @@ func (h *Handler) GetShareholderPage(ctx *gin.Context) {
 		"shareholder": shareholder,
 	})
 }
-func (h *Handler) GetRequestPage(ctx *gin.Context) {
-	// id заявки из URL
+
+
+func (h *Handler) GetDividendCalculationPage(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	requestID, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -74,50 +75,49 @@ func (h *Handler) GetRequestPage(ctx *gin.Context) {
 		return
 	}
 
-	// существует ли такая заявка
-	_, err = h.Repository.GetRequest(requestID)
+	companyProfitStr := ctx.DefaultQuery("company_profit", "10000")
+	companyProfit, _ := strconv.ParseFloat(companyProfitStr, 64)
+
+	updates := make(map[int]repository.UpdatePayload)
+	idsStr := ctx.QueryArray("shareholder_id")
+	coeffsStr := ctx.QueryArray("adjustment_coefficient")
+	finesStr := ctx.QueryArray("shareholder_fine")
+
+	for i, idStr := range idsStr {
+		id, _ := strconv.Atoi(idStr)
+		if i < len(coeffsStr) && i < len(finesStr) {
+			coeff, _ := strconv.ParseFloat(coeffsStr[i], 64)
+			fine, _ := strconv.ParseFloat(finesStr[i], 64)
+			updates[id] = repository.UpdatePayload{
+				Coefficient: coeff,
+				Fine:        fine,
+			}
+		}
+	}
+
+	updatedRequestItems, err := h.Repository.UpdateAndCalculateRequestItems(requestID, companyProfit, updates)
 	if err != nil {
-		ctx.String(http.StatusNotFound, "Заявка не найдена")
+		ctx.String(http.StatusInternalServerError, "Ошибка при расчете дивидендов")
 		return
 	}
 
-	totalProfitStr := ctx.DefaultQuery("total_profit", "10000")
-	totalProfit, _ := strconv.ParseFloat(totalProfitStr, 64)
-
-	requestItems, _ := h.Repository.GetRequestItemsByRequestID(requestID)
-
-	coeffsStr := ctx.QueryArray("coeffs")
-	finesStr := ctx.QueryArray("fines")
-	idsStr := ctx.QueryArray("ids")
-
-	results := make([]DividendResult, 0, len(requestItems))
-	for i, item := range requestItems {
+	results := make([]DividendResult, 0, len(updatedRequestItems))
+	for _, item := range updatedRequestItems {
 		shareholder, _ := h.Repository.GetShareholder(item.ShareholderID)
-
-		coeff := item.Coefficient
-		fine := item.Fine
-		
-		if len(coeffsStr) > i && len(finesStr) > i && len(idsStr) > i && idsStr[i] == strconv.Itoa(shareholder.ID) {
-			coeff, _ = strconv.ParseFloat(coeffsStr[i], 64)
-			fine, _ = strconv.ParseFloat(finesStr[i], 64)
-		}
-
-		dividend := (totalProfit * (shareholder.Share / 100)) * coeff - fine
-
 		results = append(results, DividendResult{
 			Shareholder: shareholder,
-			Coefficient: coeff,
-			Fine:        fine,
-			Dividend:    dividend,
+			Coefficient: item.Coefficient,
+			Fine:        item.Fine,
+			Dividend:    item.CalculatedDividend,
 		})
 	}
 	
-	shareholdersCount := len(requestItems)
+	shareholdersCount := len(updatedRequestItems)
 
 	ctx.HTML(http.StatusOK, "request.html", gin.H{
 		"requestID":         requestID,
 		"results":           results,
-		"totalProfit":       totalProfit,
+		"totalProfit":       companyProfit,
 		"shareholdersCount": shareholdersCount,
 	})
 }
