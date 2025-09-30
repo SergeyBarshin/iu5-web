@@ -20,10 +20,10 @@ type Shareholder struct {
 }
 
 var allShareholders = []Shareholder{
-	{ID: 1, Name: "Рубчинский Георгий Александрович", Description: "Частный инвестор, поддерживает инициативы, направленные на минимизацию рисков.", Share: 11, ImageURL: "http://localhost:8080/static/img/rubchinskiy.png"},
-	{ID: 2, Name: "Дрёмин Иван Тимофеевич", Description: "Представитель инвестиционной группы, активно продвигает внедрение новых технологий.", Share: 33, ImageURL: "http://localhost:8080/static/img/dremin.png"},
-	{ID: 3, Name: "Ляхов Григорий Алексеевич", Description: "Миноритарный акционер, заинтересован в сохранении корпоративных ценностей.", Share: 5, ImageURL: "http://localhost:8080/static/img/lyahov.png"},
-	{ID: 4, Name: "Голубин Глеб Геннадьевич", Description: "Предприниматель с опытом в промышленности, делает ставку на эффективность и сокращение издержек.", Share: 10, ImageURL: "http://localhost:8080/static/img/golubin.png"},
+	{ID: 1, Name: "Рубчинский Георгий Александрович", Description: "Частный инвестор, поддерживает инициативы, направленные на минимизацию рисков.", Share: 11, ImageURL: "http://localhost:9000/rip/rubchinskiy.png"},
+	{ID: 2, Name: "Дрёмин Иван Тимофеевич", Description: "Представитель инвестиционной группы, активно продвигает внедрение новых технологий.", Share: 33, ImageURL: "http://localhost:9000/rip/dremin.png"},
+	{ID: 3, Name: "Ляхов Григорий Алексеевич", Description: "Миноритарный акционер, заинтересован в сохранении корпоративных ценностей.", Share: 5, ImageURL: "http://localhost:9000/rip/lyahov.png"},
+	{ID: 4, Name: "Голубин Глеб Геннадьевич", Description: "Предприниматель с опытом в промышленности, делает ставку на эффективность и сокращение издержек.", Share: 10, ImageURL: "http://localhost:9000/rip/golubin.png"},
 }
 
 
