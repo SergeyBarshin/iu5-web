@@ -5,10 +5,13 @@
     <meta charset="utf-8" />
     <title>Расчет дивидендов</title>
     <link rel="stylesheet" href="/static/styles/globals.css" />
-    <link rel="stylesheet" href="/static/styles/request.css" />
+    <link
+      rel="stylesheet"
+      href="/static/styles/dividend-calculation-style.css"
+    />
     <link
       rel="icon"
-      href="http://localhost:9000/rip/logo1.svg"
+      href="http://localhost:9000/images/logo1.svg"
       type="image/svg"
     />
   </head>
@@ -21,7 +24,7 @@
               <a href="/shareholders">
                 <img
                   class="logo-image"
-                  src="http://localhost:9000/rip/logo1.svg"
+                  src="http://localhost:9000/images/logo1.svg"
                   alt="Логотип"
                 />
               </a>
@@ -33,13 +36,19 @@
         <main class="main-content">
           <header class="page-header-section">
             <h1 class="page-title">Расчет дивидендов:</h1>
+
+            <form
+              class="delete-request-form"
+              action="/delete-request"
+              method="POST"
+            >
+              <button type="submit" class="delete-request-btn">
+                Удалить заявку
+              </button>
+            </form>
           </header>
 
-          <form
-            class="dividend-form"
-            action="/dividend-calculation/{{ .requestID }}"
-            method="get"
-          >
+          <form class="dividend-form" method="post">
             <section class="profit-input-section">
               <label class="profit-input__label" for="total-profit"
                 >Итоговая прибыль компании (руб):</label
@@ -50,7 +59,8 @@
                   id="total-profit"
                   name="company_profit"
                   class="profit-input__field"
-                  value="{{ .totalProfit }}"
+                  value="{{ .calculation.TotalProfit.Float64 }}"
+                  readonly
                 />
               </div>
             </section>
@@ -78,19 +88,13 @@
               </header>
 
               <div class="calculation-list__items">
-                {{ range .results }}
+                {{ range .items }}
                 <article class="calculation-item">
-                  <input
-                    type="hidden"
-                    name="shareholder_id"
-                    value="{{ .Shareholder.ID }}"
-                  />
-
                   <div class="calculation-item__inner">
                     <div class="calculation-item__info">
                       <img
                         class="calculation-item__photo"
-                        src="{{ .Shareholder.ImageURL }}"
+                        src="{{ .Shareholder.ImageURL.String }}"
                         alt="{{ .Shareholder.Name }}"
                       />
                       <div class="calculation-item__text-content">
@@ -98,8 +102,8 @@
                           {{ .Shareholder.Name }}
                         </h3>
                         <p class="calculation-item__share">
-                          <strong>Доля в компании:</strong>
-                          {{ .Shareholder.Share }}%
+                          <strong>Доля в компании:</strong> {{
+                          .Shareholder.Share }}%
                         </p>
                         <p class="calculation-item__description">
                           {{ .Shareholder.Description }}
@@ -127,7 +131,7 @@
                         <input
                           type="text"
                           class="calculation-item__input"
-                          value='{{ printf "%.2f" .Dividend }}'
+                          value="-"
                           readonly
                         />
                       </div>
@@ -138,14 +142,14 @@
               </div>
             </section>
 
-            <button type="submit" class="dividend-form__submit-btn">
+            <button type="submit" class="dividend-form__submit-btn" disabled>
               <span class="btn__text">Пересчитать</span>
             </button>
           </form>
 
           <footer class="calculation-summary">
             <p class="calculation-summary__text">
-              Акционеров в заявке: {{ .shareholdersCount }}
+              Акционеров в заявке: {{ len .items }}
             </p>
           </footer>
         </main>

@@ -309,3 +309,42 @@
   text-align: center;
   box-shadow: 0 0 0 2px var(--white);
 }
+
+.shareholder-card__footer {
+  display: flex;
+  gap: 12px; /* Расстояние между кнопками */
+  margin-top: auto; /* Прижимает кнопки к низу карточки */
+}
+
+/* Общий стиль для текста внутри кнопок */
+.btn__text {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+/* Стили для кнопки "Добавить в расчет" */
+.page-wrapper .shareholder-card__add-btn {
+  width: 180px; /* Сделаем ее немного шире */
+  height: 40px;
+  border-radius: 8px;
+  background-color: var(--red); /* Зеленый цвет для действия "добавить" */
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.page-wrapper .shareholder-card__add-btn:hover {
+  background-color: var(--red-hover); /* Более светлый зеленый при наведении */
+}
+
+/* Стили для формы, чтобы она не имела лишних отступов */
+.add-to-draft-form {
+  margin: 0;
+  padding: 0;
+}

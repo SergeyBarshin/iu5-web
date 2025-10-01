@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>Акционеры</title>
     <link rel="stylesheet" href="/static/styles/globals.css" />
-    <link rel="stylesheet" href="/static/styles/shareholders.css" />
+    <link rel="stylesheet" href="/static/styles/shareholders-list-style.css" />
     <link
       rel="icon"
       href="http://localhost:9000/rip/cart1.svg"
@@ -27,7 +27,6 @@
                 />
               </a>
             </div>
-            <div class="page-header__spacer"></div>
           </div>
         </header>
 
@@ -37,9 +36,11 @@
               <h1 class="page-title">Акционеры</h1>
             </header>
             <div class="search-container">
+              <!-- ИЗМЕНЕНО: name="name" и value="{{ .searchQuery }}" -->
               <form class="search-form" action="/shareholders" method="get">
                 <div class="search-form__inner">
                   <div class="search-form__icon-wrapper">
+                    <!-- Иконку можно тоже сделать локальной, если нужно -->
                     <img
                       class="search-form__icon"
                       src="http://localhost:9000/rip/search.svg"
@@ -47,9 +48,9 @@
                     />
                   </div>
                   <div class="search-form__input-wrapper">
-                    <label for="search-input" class="visually-hidden">
-                      Поиск акционера...
-                    </label>
+                    <label for="search-input" class="visually-hidden"
+                      >Поиск акционера...</label
+                    >
                     <input
                       type="text"
                       id="search-input"
@@ -57,19 +58,21 @@
                       class="search-form__input"
                       placeholder="Поиск акционера..."
                       aria-label="Поиск акционера"
-                      value="{{ .name }}"
+                      value="{{ .searchQuery }}"
                     />
                   </div>
                 </div>
               </form>
             </div>
             <div class="shareholders-grid">
+              <!-- ИЗМЕНЕНО: теперь перебираем .shareholders из хендлера -->
               {{ range .shareholders }}
               <article class="shareholder-card">
                 <div class="shareholder-card__photo-wrapper">
+                  <!-- ИЗМЕНЕНО: используем .ImageURL.String для nullable поля -->
                   <img
                     class="shareholder-card__photo"
-                    src="{{ .ImageURL }}"
+                    src="{{ .ImageURL.String }}"
                     alt="{{ .Name }}"
                   />
                 </div>
@@ -81,7 +84,7 @@
                   <div class="shareholder-card__share-info">
                     <p class="share-info__text">
                       <span class="share-info__label">Доля в компании:</span>
-                      <span class="share-info__value"> {{ .Share }}% </span>
+                      <span class="share-info__value">{{ .Share }}%</span>
                     </p>
                   </div>
                   <div class="shareholder-card__footer">
@@ -92,6 +95,22 @@
                     >
                       <span class="btn__text">Подробнее</span>
                     </a>
+
+                    <!-- ИЗМЕНЕНО: Форма для добавления в "корзину" (POST-запрос) -->
+                    <form
+                      action="/add-shareholder-to-request"
+                      method="POST"
+                      class="add-to-draft-form"
+                    >
+                      <input
+                        type="hidden"
+                        name="shareholder_id"
+                        value="{{ .ID }}"
+                      />
+                      <button type="submit" class="shareholder-card__add-btn">
+                        <span class="btn__text">Добавить в расчет</span>
+                      </button>
+                    </form>
                   </div>
                 </div>
               </article>
@@ -101,15 +120,25 @@
         </main>
       </div>
     </div>
+
+    <!-- ИЗМЕНЕНО: Логика для плавающей иконки "корзины" -->
+    {{ if gt .draftID 0 }}
+    <!-- Если черновик существует (ID > 0), ссылка активна -->
     <a
-      href="/dividend-calculation/1"
-      class="floating-cart"
+      href="/dividend-calculation/{{ .draftID }}"
+      class="floating-cart is-active"
       aria-label="Перейти к расчету дивидендов"
     >
-      <img src="http://localhost:8080/static/img/cart1.svg" alt="Заявка" />
+      <img src="http://localhost:9000/rip/cart1.svg" alt="Заявка" />
       <span class="cart-badge" aria-label="Количество в заявке">
-        {{ .Count }}
+        {{ .cartCount }}
       </span>
     </a>
+    {{ else }}
+    <!-- Если черновика нет, показываем неактивную иконку -->
+    <div class="floating-cart" aria-label="Корзина пуста">
+      <img src="http://localhost:9000/rip/cart1.svg" alt="Заявка" />
+    </div>
+    {{ end }}
   </body>
 </html>

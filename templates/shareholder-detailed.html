@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/static/styles/shareholder.css" />
     <link
       rel="icon"
-      href="http://localhost:9000/rip/logo1.svg"
+      href="http://localhost:9000/images/logo1.svg"
       type="image/svg"
     />
   </head>
@@ -21,7 +21,7 @@
               <a href="/shareholders">
                 <img
                   class="logo-image"
-                  src="http://localhost:9000/rip/logo1.svg"
+                  src="http://localhost:9000/images/logo1.svg"
                   alt="Логотип"
                 />
               </a>
@@ -54,7 +54,7 @@
             <div class="shareholder-profile__photo-wrapper">
               <img
                 class="shareholder-profile__photo"
-                src="{{ .shareholder.ImageURL }}"
+                src="{{ .shareholder.ImageURL.String }}"
                 alt="{{ .shareholder.Name }}"
               />
             </div>
