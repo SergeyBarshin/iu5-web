@@ -28,6 +28,7 @@ func (h *Handler) RegisterRoutes(router *gin.Engine) {
 	router.POST("/delete-request", h.LogicallyDeleteDraft)
 
 	//router.POST("/dividend-calculation/:id/update", h.UpdateCalculation)
+	router.NoRoute(h.NotFoundPage)
 }
 
 // RegisterStatic регистрирует статические файлы и шаблоны

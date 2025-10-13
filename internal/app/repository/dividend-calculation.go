@@ -56,7 +56,7 @@ func (r *Repository) LogicallyDeleteDraftCalculation(userID uint) error {
 	}
 	return nil
 }
-
+/*
 // UpdateCalculationItems обновляет данные (коэффициенты и штрафы) для элементов расчета
 func (r *Repository) UpdateCalculationItems(items []ds.ShareholderInCalculation) error {
 	// Транзакция, чтобы все обновления были атомарны
@@ -74,4 +74,4 @@ func (r *Repository) UpdateCalculationItems(items []ds.ShareholderInCalculation)
 		}
 		return nil
 	})
-}
+}*/

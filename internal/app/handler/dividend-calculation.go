@@ -1,11 +1,8 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
-
-	"shareholder-app/internal/app/ds"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -58,6 +55,7 @@ func (h *Handler) LogicallyDeleteDraft(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, "/shareholders")
 }
 
+/*
 // UpdateCalculation обрабатывает форму со страницы расчета для обновления данных
 func (h *Handler) UpdateCalculation(ctx *gin.Context) {
 	idStr := ctx.Param("id")
@@ -92,4 +90,4 @@ func (h *Handler) UpdateCalculation(ctx *gin.Context) {
 	
 	// Редирект на ту же страницу для отображения обновленных данных
 	ctx.Redirect(http.StatusFound, fmt.Sprintf("/dividend-calculation/%d", calculationID))
-}
+}*/
