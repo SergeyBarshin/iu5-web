@@ -1,11 +1,13 @@
+// Файл: cmd/app/main.go
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"shareholder-app/internal/app/config"
 	"shareholder-app/internal/app/dsn"
 	"shareholder-app/internal/app/handler"
+	"shareholder-app/internal/app/minioClient"
 	"shareholder-app/internal/app/repository"
 	app "shareholder-app/internal/pkg"
 
@@ -14,8 +16,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// main инициализирует конфигурацию, репозиторий, хендлеры и запускает приложение
 func main() {
+	// код логгера, godotenv, router, config
 	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
 	})
@@ -24,31 +26,36 @@ func main() {
 		logrus.Info("Warning: .env file not found, continuing with environment variables")
 	}
 
-	router := gin.Default() // создание нового роутера Gin
+	router := gin.Default()
 
-	// Загрузка конфигурации приложения
 	conf, err := config.NewConfig()
 	if err != nil {
 		logrus.Fatalf("error loading config: %v", err)
 	}
 
-	// Получение строки подключения к PostgreSQL
 	postgresString := dsn.FromEnv()
 	if postgresString == "" {
 		logrus.Fatal("PostgreSQL DSN string is not configured. Please check your .env file.")
 	}
-	fmt.Println("DSN string loaded successfully.")
+	log.Println("DSN string loaded successfully.")
 
-	// Инициализация репозитория
-	rep, errRep := repository.NewRepository(postgresString)
+	// Инициализация клиента MinIO
+	mc, errMc := minioClient.New()
+	if errMc != nil {
+		logrus.Fatalf("error initializing minio client: %v", errMc)
+	}
+	log.Println("MinIO client initialized successfully.")
+
+	// Инициализация репозитория (теперь с MinIO)
+	rep, errRep := repository.NewRepository(postgresString, mc)
 	if errRep != nil {
 		logrus.Fatalf("error initializing repository: %v", errRep)
 	}
-
-	// Создание хендлера с подключённым репозиторием
+	log.Println("Repository initialized successfully.")
+	
+	// Создание хендлера (теперь без MinIO)
 	hand := handler.NewHandler(rep)
 
-	// Инициализация приложения и запуск сервера
 	application := app.NewApp(conf, router, hand)
 	application.RunApp()
 }

@@ -32,7 +32,7 @@ func (a *Application) RunApp() {
 
 	// Регистрируем маршруты и статику
 	a.Handler.RegisterRoutes(a.Router)
-	a.Handler.RegisterStatic(a.Router)
+	//a.Handler.RegisterStatic(a.Router)
 
 	// Формируем адрес сервера
 	serverAddress := fmt.Sprintf("%s:%d", a.Config.ServiceHost, a.Config.ServicePort)
