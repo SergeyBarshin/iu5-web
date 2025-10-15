@@ -1,5 +1,3 @@
-// Файл: internal/app/handler/shareholder.go
-
 package handler
 
 import (
@@ -9,28 +7,37 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
-// GetShareholders обрабатывает GET /api/shareholders
-// Получает список акционеров, опционально с фильтром по имени.
+// GetShareholders godoc
+// @Summary Get list of shareholders
+// @Description Get all shareholders with optional name filter. Publicly accessible.
+// @Tags shareholders
+// @Produce json
+// @Param name query string false "Filter by shareholder name (case-insensitive)"
+// @Success 200 {array} api_types.ShareholderResponse
+// @Router /shareholders [get]
 func (h *Handler) GetShareholders(ctx *gin.Context) {
-	// Получаем query-параметр для фильтрации по имени
 	nameFilter := ctx.Query("name")
-
 	shareholders, err := h.Repository.GetShareholdersWithFilter(nameFilter)
 	if err != nil {
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
-	// Конвертируем модели БД в JSON-ответ
 	resp := api_types.ConvertShareholdersToResponse(shareholders)
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// GetShareholderByID обрабатывает GET /api/shareholders/:id
-// Получает одного акционера по его ID.
+// GetShareholderByID godoc
+// @Summary Get a shareholder by ID
+// @Description Get details of a single shareholder by its ID. Publicly accessible.
+// @Tags shareholders
+// @Produce json
+// @Param id path int true "Shareholder ID"
+// @Success 200 {object} api_types.ShareholderResponse
+// @Failure 400 {object} map[string]string "Invalid ID format"
+// @Failure 404 {object} map[string]string "Shareholder not found"
+// @Router /shareholders/{id} [get]
 func (h *Handler) GetShareholderByID(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -38,39 +45,57 @@ func (h *Handler) GetShareholderByID(ctx *gin.Context) {
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("invalid id parameter: %w", err))
 		return
 	}
-
 	shareholder, err := h.Repository.GetShareholderByID(uint(id))
 	if err != nil {
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
 	resp := api_types.ConvertShareholderToResponse(shareholder)
 	ctx.JSON(http.StatusOK, resp)
 }
 
-// CreateShareholder обрабатывает POST /api/shareholders
-// Создает нового акционера.
+// CreateShareholder godoc
+// @Summary Create a new shareholder (Moderator only)
+// @Description Add a new shareholder to the database. Requires moderator rights.
+// @Tags shareholders
+// @Accept json
+// @Produce json
+// @Param shareholder body api_types.ShareholderRequest true "Shareholder object"
+// @Success 201 {object} api_types.ShareholderResponse
+// @Failure 400 {object} map[string]string "Invalid request body"
+// @Failure 401 {object} map[string]string "Unauthorized"
+// @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
+// @Security BearerAuth
+// @Router /shareholders [post]
 func (h *Handler) CreateShareholder(ctx *gin.Context) {
 	var req api_types.ShareholderRequest
 	if err := ctx.BindJSON(&req); err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest, err)
 		return
 	}
-
 	shareholder, err := h.Repository.CreateShareholder(req)
 	if err != nil {
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
-	// Устанавливаем заголовок Location, как в референсе, для REST-совместимости
-	ctx.Header("Location", fmt.Sprintf("/api/shareholders/%d", shareholder.ID))
+	ctx.Header("Location", fmt.Sprintf("/api/v1/shareholders/%d", shareholder.ID))
 	ctx.JSON(http.StatusCreated, api_types.ConvertShareholderToResponse(shareholder))
 }
 
-// UpdateShareholder обрабатывает PUT /api/shareholders/:id
-// Обновляет существующего акционера.
+// UpdateShareholder godoc
+// @Summary Update a shareholder (Moderator only)
+// @Description Update an existing shareholder's data. Requires moderator rights.
+// @Tags shareholders
+// @Accept json
+// @Produce json
+// @Param id path int true "Shareholder ID"
+// @Param shareholder body api_types.ShareholderRequest true "Shareholder object"
+// @Success 200 {object} api_types.ShareholderResponse
+// @Failure 400 {object} map[string]string "Invalid ID or request body"
+// @Failure 401 {object} map[string]string "Unauthorized"
+// @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
+// @Security BearerAuth
+// @Router /shareholders/{id} [put]
 func (h *Handler) UpdateShareholder(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -78,56 +103,60 @@ func (h *Handler) UpdateShareholder(ctx *gin.Context) {
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("invalid id parameter: %w", err))
 		return
 	}
-
 	var req api_types.ShareholderRequest
 	if err := ctx.BindJSON(&req); err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest, err)
 		return
 	}
-
 	shareholder, err := h.Repository.UpdateShareholder(uint(id), req)
 	if err != nil {
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
 	ctx.JSON(http.StatusOK, api_types.ConvertShareholderToResponse(shareholder))
 }
 
-// DeleteShareholder обрабатывает DELETE /api/shareholders/:id
-// Удаляет акционера.
+// DeleteShareholder godoc
+// @Summary Delete a shareholder (Moderator only)
+// @Description Logically delete a shareholder by its ID. Requires moderator rights.
+// @Tags shareholders
+// @Produce json
+// @Param id path int true "Shareholder ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} map[string]string "Invalid ID format"
+// @Failure 401 {object} map[string]string "Unauthorized"
+// @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
+// @Security BearerAuth
+// @Router /shareholders/{id} [delete]
 func (h *Handler) DeleteShareholder(ctx *gin.Context) {
-	logrus.Info("DeleteShareholder handler: started") // <-- Лог 1: Начало работы
-
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("invalid id parameter: %w", err))
 		return
 	}
-
-	logrus.Infof("DeleteShareholder handler: parsed shareholder ID: %d", id) // <-- Лог 2: ID получен
-
-	logrus.Info("DeleteShareholder handler: calling repository method...") // <-- Лог 3: Перед вызовом репозитория
-
 	err = h.Repository.DeleteShareholder(uint(id))
-
-	logrus.Info("DeleteShareholder handler: repository method finished.") // <-- Лог 4: После вызова репозитория
-
 	if err != nil {
-		logrus.Errorf("DeleteShareholder handler: repository returned an error: %v", err)
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
-	logrus.Info("DeleteShareholder handler: sending 204 No Content response") // <-- Лог 5: Успешное завершение
-
-	// При успешном удалении возвращаем статус 204 No Content
 	ctx.Status(http.StatusNoContent)
 }
 
-// UploadShareholderImage обрабатывает POST /api/shareholders/:id/image
-// Загружает изображение для акционера.
+// UploadShareholderImage godoc
+// @Summary Upload an image for a shareholder (Moderator only)
+// @Description Upload an image and associate it with a shareholder. Requires moderator rights.
+// @Tags shareholders
+// @Accept multipart/form-data
+// @Produce json
+// @Param id path int true "Shareholder ID"
+// @Param image formData file true "Image file"
+// @Success 200 {object} map[string]string "Image URL"
+// @Failure 400 {object} map[string]string "Invalid ID or file"
+// @Failure 401 {object} map[string]string "Unauthorized"
+// @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
+// @Security BearerAuth
+// @Router /shareholders/{id}/image [post]
 func (h *Handler) UploadShareholderImage(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -135,43 +164,49 @@ func (h *Handler) UploadShareholderImage(ctx *gin.Context) {
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("invalid id parameter: %w", err))
 		return
 	}
-
 	file, err := ctx.FormFile("image")
 	if err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("image file is required in 'image' form field: %w", err))
 		return
 	}
-
 	shareholder, err := h.Repository.UploadShareholderImage(uint(id), file)
 	if err != nil {
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"image_url": shareholder.ImageURL.String,
-	})
+	ctx.JSON(http.StatusOK, gin.H{"image_url": shareholder.ImageURL.String})
 }
 
-// AddShareholderToDraft обрабатывает POST /api/shareholders/:id/add-to-draft
-// Добавляет акционера в черновик расчета.
+// AddShareholderToDraft godoc
+// @Summary Add a shareholder to the draft calculation
+// @Description Adds a shareholder to the current user's draft calculation.
+// @Tags shareholders
+// @Produce json
+// @Param id path int true "Shareholder ID to add"
+// @Success 200 {object} map[string]string "Success message"
+// @Failure 400 {object} map[string]string "Invalid ID format"
+// @Failure 401 {object} map[string]string "Unauthorized"
+// @Security BearerAuth
+// @Router /shareholders/{id}/add-to-draft [post]
 func (h *Handler) AddShareholderToDraft(ctx *gin.Context) {
-	idStr := ctx.Param("id")
-	id, err := strconv.ParseUint(idStr, 10, 32)
+	// --- ИЗМЕНЕНИЕ ---
+	userID, err := GetUserID(ctx)
+	if err != nil {
+		h.errorHandler(ctx, http.StatusUnauthorized, err)
+		return
+	}
+
+	shareholderIDStr := ctx.Param("id")
+	shareholderID, err := strconv.ParseUint(shareholderIDStr, 10, 32)
 	if err != nil {
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("invalid id parameter: %w", err))
 		return
 	}
 
-	err = h.Repository.AddShareholderToDraftCalculation(uint(id))
+	err = h.Repository.AddShareholderToDraftCalculation(uint(shareholderID), userID)
 	if err != nil {
-		// Здесь мы передаем ошибку как есть, т.к. наш errorHandler уже умеет
-		// обрабатывать ErrNotFound, ErrAlreadyExists и т.д.
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
-	// В референсе возвращался созданный research, но по заданию нам достаточно
-	// просто вернуть подтверждение успеха.
 	ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "shareholder added to draft"})
 }

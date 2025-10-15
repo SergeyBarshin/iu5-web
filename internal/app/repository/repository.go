@@ -1,9 +1,16 @@
 package repository
 
 import (
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
+	"fmt"
+	"os"
 	"shareholder-app/internal/app/minioClient"
+	"time"
 
+	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -16,36 +23,54 @@ var (
 )
 
 type Repository struct {
-	db     *gorm.DB
-	mc     *minioClient.Client // Клиент MinIO как в референсе
-	userId uint                // ID "авторизованного" пользователя
+	db *gorm.DB
+	mc *minioClient.Client
+	rd *redis.Client
 }
 
-// NewRepository принимает и minioClient
 func NewRepository(dsn string, mc *minioClient.Client) (*Repository, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
-	// Устанавливаем пользователя по умолчанию, как требует задание
-	// Например, пользователь с ID=1 будет нашим создателем
+
+	redisHost := os.Getenv("REDIS_HOST")
+	redisPort := os.Getenv("REDIS_PORT")
+	rd := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%s", redisHost, redisPort),
+		Password: "",
+		DB:       0,
+	})
+
+	if _, err := rd.Ping(context.Background()).Result(); err != nil {
+		return nil, fmt.Errorf("failed to connect to Redis: %w", err)
+	}
+
 	return &Repository{
-		db:     db,
-		mc:     mc,
-		userId: 1, // Пользователь-создатель по умолчанию
+		db: db,
+		mc: mc,
+		rd: rd,
 	}, nil
 }
 
-// --- Методы для управления "сессией" ---
-
-func (r *Repository) GetUserID() uint {
-	return r.userId
+func blacklistKeyForToken(tokenString string) string {
+	h := sha256.Sum256([]byte(tokenString))
+	return "blacklist:" + hex.EncodeToString(h[:])
 }
 
-func (r *Repository) SetUserID(id uint) {
-	r.userId = id
+func (r *Repository) AddTokenToBlacklist(ctx context.Context, tokenString string, ttl time.Duration) error {
+	if ttl <= 0 {
+		return nil
+	}
+	key := blacklistKeyForToken(tokenString)
+	return r.rd.Set(ctx, key, "1", ttl).Err()
 }
 
-func (r *Repository) SignOut() {
-	r.userId = 0 // "Разлогиниваемся", сбрасывая ID
+func (r *Repository) IsTokenBlacklisted(ctx context.Context, tokenString string) (bool, error) {
+	key := blacklistKeyForToken(tokenString)
+	val, err := r.rd.Exists(ctx, key).Result()
+	if err != nil {
+		return false, err
+	}
+	return val > 0, nil
 }

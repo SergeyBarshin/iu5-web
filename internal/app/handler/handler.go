@@ -3,10 +3,13 @@ package handler
 import (
 	"errors"
 	"net/http"
+	_ "shareholder-app/docs"
 	"shareholder-app/internal/app/repository"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Handler struct {
@@ -19,60 +22,75 @@ func NewHandler(r *repository.Repository) *Handler {
 	}
 }
 
-// RegisterRoutes регистрирует все маршруты API в точности по заданию
+// RegisterRoutes регистрирует все маршруты API с разделением на группы доступа.
+// @title Shareholder App API
+// @version 1.0
+// @description REST API for Shareholder Management and Dividend Calculation App.
+// @host localhost:8080
+// @BasePath /api/v1
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func (h *Handler) RegisterRoutes(router *gin.Engine) {
-	api := router.Group("/api")
+	// Добавляем Swagger UI
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	api := router.Group("/api/v1")
 	{
-		// --- Домен "Пользователь" (User) ---
-		// POST /api/users/register - Регистрация
-		// POST /api/users/login - Аутентификация
-		// POST /api/users/logout - Деавторизация
-		// GET /api/users/me - Получение данных о "себе" (личный кабинет)
-		// PUT /api/users/me - Изменение данных о "себе" (личный кабинет)
-		users := api.Group("/users")
+		// --- Публичные роуты (доступны всем) ---
+		public := api.Group("/")
 		{
-			users.POST("/register", h.RegisterUser)
-			users.POST("/login", h.LoginUser)
-			users.POST("/logout", h.LogoutUser) // Деавторизация
-			users.GET("/me", h.GetMyProfile)     // Личный кабинет
-			users.PUT("/me", h.UpdateMyProfile)  // Личный кабинет
+			// Пользователь
+			public.POST("/users/register", h.RegisterUser)
+			public.POST("/users/login", h.LoginUser)
+			// Акционеры (только чтение)
+			public.GET("/shareholders", h.GetShareholders)
+			public.GET("/shareholders/:id", h.GetShareholderByID)
 		}
 
-		// --- Домен "Акционеры" (Shareholders) ---
-		shareholders := api.Group("/shareholders")
+		// --- Защищенные роуты (требуют аутентификации) ---
+		protected := api.Group("/")
+		protected.Use(h.AuthMiddleware(false)) // false = не требует прав модератора
 		{
-			shareholders.GET("", h.GetShareholders)            // GET список с фильтрацией
-			shareholders.POST("", h.CreateShareholder)           // POST добавление (без изображения)
-			shareholders.GET("/:id", h.GetShareholderByID)       // GET одна запись
-			shareholders.PUT("/:id", h.UpdateShareholder)        // PUT изменение
-			shareholders.DELETE("/:id", h.DeleteShareholder)       // DELETE удаление
-			shareholders.POST("/:id/image", h.UploadShareholderImage) // POST добавление изображения
-			shareholders.POST("/:id/add-to-draft", h.AddShareholderToDraft) // POST добавления в заявку-черновик
+			// Пользователь
+			protected.POST("/users/logout", h.LogoutUser)
+			protected.GET("/users/me", h.GetMyProfile)
+			protected.PUT("/users/me", h.UpdateMyProfile)
 
+			// Акционеры (создание, изменение, добавление в черновик)
+			protected.POST("/shareholders/:id/add-to-draft", h.AddShareholderToDraft)
+
+			// Расчеты
+			protected.GET("/dividend-calculations/cart", h.GetCartInfo)
+			protected.GET("/dividend-calculations", h.GetCalculationsList)
+			protected.GET("/dividend-calculations/:id", h.GetCalculationByID)
+			protected.PUT("/dividend-calculations/:id", h.UpdateCalculation)
+			protected.PUT("/dividend-calculations/:id/submit", h.SubmitCalculation)
+			protected.DELETE("/dividend-calculations/:id", h.DeleteCalculation)
+
+			// М-М
+			protected.DELETE("/dividend-calculations/:id/shareholders/:shareholder_id", h.DeleteShareholderFromCalculation)
+			protected.PUT("/dividend-calculations/:id/shareholders/:shareholder_id", h.UpdateShareholderInCalculation)
 		}
 
-		// --- Домен "Расчеты" (Dividend Calculations) ---
-		calculations := api.Group("/dividend-calculations")
+		// --- Роуты только для модераторов ---
+		moderator := api.Group("/")
+		moderator.Use(h.AuthMiddleware(true)) // true = требует прав модератора
 		{
-			calculations.GET("/cart", h.GetCartInfo)                   // GET иконки корзины
-			calculations.GET("", h.GetCalculationsList)            // GET список (с фильтрацией)
-			calculations.GET("/:id", h.GetCalculationByID)           // GET одна запись
-			calculations.PUT("/:id", h.UpdateCalculation)            // PUT изменения полей
-			calculations.PUT("/:id/submit", h.SubmitCalculation)           // PUT сформировать
-			calculations.PUT("/:id/moderate", h.ModerateCalculation)       // PUT завершить/отклонить
-			calculations.DELETE("/:id", h.DeleteCalculation)             // DELETE удаление (логическое)
-		}
+			// Акционеры (полный CRUD)
+			moderator.POST("/shareholders", h.CreateShareholder)
+			moderator.PUT("/shareholders/:id", h.UpdateShareholder)
+			moderator.DELETE("/shareholders/:id", h.DeleteShareholder)
+			moderator.POST("/shareholders/:id/image", h.UploadShareholderImage)
 
-		// --- Домен "М-М" (Элементы в расчете) ---
-		// Используем вложенные роуты для REST-совместимости
-		calculationItems := api.Group("/dividend-calculations/:id/shareholders/:shareholder_id")
-		{
-			calculationItems.DELETE("", h.DeleteShareholderFromCalculation) // DELETE удаление из заявки
-			calculationItems.PUT("", h.UpdateShareholderInCalculation)    // PUT изменение в м-м
+			// Расчеты (модерация)
+			moderator.PUT("/dividend-calculations/:id/moderate", h.ModerateCalculation)
 		}
 	}
-	
-	router.NoRoute(h.NotFoundPage) // Обработчик 404
+
+	router.NoRoute(func(ctx *gin.Context) {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Page not found"})
+	})
 }
 
 // errorHandler обрабатывает ошибки и отправляет стандартизированный JSON-ответ
