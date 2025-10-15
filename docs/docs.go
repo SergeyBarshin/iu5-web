@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/dividend-calculations": {
+        "/api/v1/dividend-calculations": {
             "get": {
                 "security": [
                     {
@@ -72,7 +72,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dividend-calculations/cart": {
+        "/api/v1/dividend-calculations/cart": {
             "get": {
                 "security": [
                     {
@@ -106,7 +106,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dividend-calculations/{id}": {
+        "/api/v1/dividend-calculations/{id}": {
             "get": {
                 "security": [
                     {
@@ -267,7 +267,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dividend-calculations/{id}/moderate": {
+        "/api/v1/dividend-calculations/{id}/moderate": {
             "put": {
                 "security": [
                     {
@@ -331,7 +331,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dividend-calculations/{id}/shareholders/{shareholder_id}": {
+        "/api/v1/dividend-calculations/{id}/shareholders/{shareholder_id}": {
             "put": {
                 "security": [
                     {
@@ -456,7 +456,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dividend-calculations/{id}/submit": {
+        "/api/v1/dividend-calculations/{id}/submit": {
             "put": {
                 "security": [
                     {
@@ -508,7 +508,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/shareholders": {
+        "/api/v1/shareholders": {
             "get": {
                 "description": "Get all shareholders with optional name filter. Publicly accessible.",
                 "produces": [
@@ -603,7 +603,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/shareholders/{id}": {
+        "/api/v1/shareholders/{id}": {
             "get": {
                 "description": "Get details of a single shareholder by its ID. Publicly accessible.",
                 "produces": [
@@ -777,7 +777,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/shareholders/{id}/add-to-draft": {
+        "/api/v1/shareholders/{id}/add-to-draft": {
             "post": {
                 "security": [
                     {
@@ -832,7 +832,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/shareholders/{id}/image": {
+        "/api/v1/shareholders/{id}/image": {
             "post": {
                 "security": [
                     {
@@ -906,7 +906,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/login": {
+        "/api/v1/users/login": {
             "post": {
                 "description": "Authenticates a user and returns a JWT token.",
                 "consumes": [
@@ -961,7 +961,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/logout": {
+        "/api/v1/users/logout": {
             "post": {
                 "security": [
                     {
@@ -998,7 +998,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/me": {
+        "/api/v1/users/me": {
             "get": {
                 "security": [
                     {
@@ -1087,7 +1087,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/register": {
+        "/api/v1/users/register": {
             "post": {
                 "description": "Creates a new user account.",
                 "consumes": [

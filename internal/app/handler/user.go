@@ -5,6 +5,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"shareholder-app/internal/app/api_types"
@@ -23,7 +24,7 @@ import (
 // @Success 201 {object} api_types.UserResponse "Successfully created user"
 // @Failure 400 {object} map[string]string "Invalid request body"
 // @Failure 500 {object} map[string]string "Internal server error"
-// @Router /users/register [post]
+// @Router /api/v1/users/register [post]
 func (h *Handler) RegisterUser(ctx *gin.Context) {
 	var req api_types.UserRegisterRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -52,7 +53,7 @@ func (h *Handler) RegisterUser(ctx *gin.Context) {
 // @Success 200 {object} map[string]string "JWT token"
 // @Failure 400 {object} map[string]string "Invalid request body"
 // @Failure 401 {object} map[string]string "Invalid credentials"
-// @Router /users/login [post]
+// @Router /api/v1/users/login [post]
 func (h *Handler) LoginUser(ctx *gin.Context) {
 	var req api_types.UserLoginRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -79,13 +80,17 @@ func (h *Handler) LoginUser(ctx *gin.Context) {
 // @Success 200 {object} map[string]string "Logout status"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Security BearerAuth
-// @Router /users/logout [post]
+// @Router /api/v1/users/logout [post]
 func (h *Handler) LogoutUser(ctx *gin.Context) {
+	log.Println("[DEBUG] LogoutUser: Handler started.")
+
 	tokenString := extractTokenFromHeader(ctx.Request)
 	if tokenString == "" {
+		log.Println("[DEBUG] LogoutUser: Token not found in header.")
 		h.errorHandler(ctx, http.StatusUnauthorized, fmt.Errorf("no token provided"))
 		return
 	}
+	log.Printf("[DEBUG] LogoutUser: Extracted token: %s\n", tokenString)
 
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_KEY")), nil
@@ -93,23 +98,28 @@ func (h *Handler) LogoutUser(ctx *gin.Context) {
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
+		log.Println("[DEBUG] LogoutUser: Failed to parse token claims.")
 		h.errorHandler(ctx, http.StatusBadRequest, fmt.Errorf("invalid token claims"))
 		return
 	}
 
 	ttl, err := tokenTTLFromClaims(claims)
 	if err != nil {
-		// Если токен уже истек, просто сообщаем об успешном выходе
+		log.Printf("[DEBUG] LogoutUser: Error getting TTL from claims: %v. Token might be expired.\n", err)
+		// Если токен уже истек, это не ошибка, просто выходим.
 		ctx.JSON(http.StatusOK, gin.H{"status": "logged_out"})
 		return
 	}
+	log.Printf("[DEBUG] LogoutUser: Calculated TTL: %v\n", ttl)
 
 	err = h.Repository.AddTokenToBlacklist(context.Background(), tokenString, ttl)
 	if err != nil {
+		log.Printf("[DEBUG] LogoutUser: Error from AddTokenToBlacklist: %v\n", err)
 		h.errorHandler(ctx, http.StatusInternalServerError, err)
 		return
 	}
 
+	log.Println("[DEBUG] LogoutUser: Token successfully added to blacklist.")
 	ctx.JSON(http.StatusOK, gin.H{"status": "logged_out"})
 }
 
@@ -121,7 +131,7 @@ func (h *Handler) LogoutUser(ctx *gin.Context) {
 // @Success 200 {object} api_types.UserResponse "User profile"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Security BearerAuth
-// @Router /users/me [get]
+// @Router /api/v1/users/me [get]
 func (h *Handler) GetMyProfile(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -147,7 +157,7 @@ func (h *Handler) GetMyProfile(ctx *gin.Context) {
 // @Failure 400 {object} map[string]string "Invalid request body"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Security BearerAuth
-// @Router /users/me [put]
+// @Router /api/v1/users/me [put]
 func (h *Handler) UpdateMyProfile(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {

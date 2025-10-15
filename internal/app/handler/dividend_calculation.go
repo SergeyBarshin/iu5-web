@@ -20,7 +20,7 @@ import (
 // @Success 200 {object} api_types.CartInfoResponse
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Security BearerAuth
-// @Router /dividend-calculations/cart [get]
+// @Router /api/v1/dividend-calculations/cart [get]
 func (h *Handler) GetCartInfo(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -49,7 +49,7 @@ func (h *Handler) GetCartInfo(ctx *gin.Context) {
 // @Success 200 {array} api_types.CalculationResponse
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Security BearerAuth
-// @Router /dividend-calculations [get]
+// @Router /api/v1/dividend-calculations [get]
 func (h *Handler) GetCalculationsList(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -96,7 +96,7 @@ func (h *Handler) GetCalculationsList(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id} [get]
+// @Router /api/v1/dividend-calculations/{id} [get]
 func (h *Handler) GetCalculationByID(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -127,7 +127,7 @@ func (h *Handler) GetCalculationByID(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not creator or not a draft)"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id} [put]
+// @Router /api/v1/dividend-calculations/{id} [put]
 func (h *Handler) UpdateCalculation(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -159,7 +159,7 @@ func (h *Handler) UpdateCalculation(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not creator or not a draft)"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id}/submit [put]
+// @Router /api/v1/dividend-calculations/{id}/submit [put]
 func (h *Handler) SubmitCalculation(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -188,7 +188,7 @@ func (h *Handler) SubmitCalculation(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not a moderator or not a submitted calculation)"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id}/moderate [put]
+// @Router /api/v1/dividend-calculations/{id}/moderate [put]
 func (h *Handler) ModerateCalculation(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -222,7 +222,7 @@ func (h *Handler) ModerateCalculation(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not creator or not a draft)"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id} [delete]
+// @Router /api/v1/dividend-calculations/{id} [delete]
 func (h *Handler) DeleteCalculation(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {

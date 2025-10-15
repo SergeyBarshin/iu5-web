@@ -21,7 +21,7 @@ import (
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not creator or not a draft)"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id}/shareholders/{shareholder_id} [delete]
+// @Router /api/v1/dividend-calculations/{id}/shareholders/{shareholder_id} [delete]
 func (h *Handler) DeleteShareholderFromCalculation(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {
@@ -52,7 +52,7 @@ func (h *Handler) DeleteShareholderFromCalculation(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not creator or not a draft)"
 // @Security BearerAuth
-// @Router /dividend-calculations/{id}/shareholders/{shareholder_id} [put]
+// @Router /api/v1/dividend-calculations/{id}/shareholders/{shareholder_id} [put]
 func (h *Handler) UpdateShareholderInCalculation(ctx *gin.Context) {
 	userID, err := GetUserID(ctx)
 	if err != nil {

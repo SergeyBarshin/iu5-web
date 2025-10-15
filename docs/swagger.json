@@ -4,7 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/dividend-calculations": {
+        "/api/v1/dividend-calculations": {
             "get": {
                 "security": [
                     {
@@ -61,7 +61,7 @@
                 }
             }
         },
-        "/dividend-calculations/cart": {
+        "/api/v1/dividend-calculations/cart": {
             "get": {
                 "security": [
                     {
@@ -95,7 +95,7 @@
                 }
             }
         },
-        "/dividend-calculations/{id}": {
+        "/api/v1/dividend-calculations/{id}": {
             "get": {
                 "security": [
                     {
@@ -256,7 +256,7 @@
                 }
             }
         },
-        "/dividend-calculations/{id}/moderate": {
+        "/api/v1/dividend-calculations/{id}/moderate": {
             "put": {
                 "security": [
                     {
@@ -320,7 +320,7 @@
                 }
             }
         },
-        "/dividend-calculations/{id}/shareholders/{shareholder_id}": {
+        "/api/v1/dividend-calculations/{id}/shareholders/{shareholder_id}": {
             "put": {
                 "security": [
                     {
@@ -445,7 +445,7 @@
                 }
             }
         },
-        "/dividend-calculations/{id}/submit": {
+        "/api/v1/dividend-calculations/{id}/submit": {
             "put": {
                 "security": [
                     {
@@ -497,7 +497,7 @@
                 }
             }
         },
-        "/shareholders": {
+        "/api/v1/shareholders": {
             "get": {
                 "description": "Get all shareholders with optional name filter. Publicly accessible.",
                 "produces": [
@@ -592,7 +592,7 @@
                 }
             }
         },
-        "/shareholders/{id}": {
+        "/api/v1/shareholders/{id}": {
             "get": {
                 "description": "Get details of a single shareholder by its ID. Publicly accessible.",
                 "produces": [
@@ -766,7 +766,7 @@
                 }
             }
         },
-        "/shareholders/{id}/add-to-draft": {
+        "/api/v1/shareholders/{id}/add-to-draft": {
             "post": {
                 "security": [
                     {
@@ -821,7 +821,7 @@
                 }
             }
         },
-        "/shareholders/{id}/image": {
+        "/api/v1/shareholders/{id}/image": {
             "post": {
                 "security": [
                     {
@@ -895,7 +895,7 @@
                 }
             }
         },
-        "/users/login": {
+        "/api/v1/users/login": {
             "post": {
                 "description": "Authenticates a user and returns a JWT token.",
                 "consumes": [
@@ -950,7 +950,7 @@
                 }
             }
         },
-        "/users/logout": {
+        "/api/v1/users/logout": {
             "post": {
                 "security": [
                     {
@@ -987,7 +987,7 @@
                 }
             }
         },
-        "/users/me": {
+        "/api/v1/users/me": {
             "get": {
                 "security": [
                     {
@@ -1076,7 +1076,7 @@
                 }
             }
         },
-        "/users/register": {
+        "/api/v1/users/register": {
             "post": {
                 "description": "Creates a new user account.",
                 "consumes": [

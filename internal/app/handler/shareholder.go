@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Param name query string false "Filter by shareholder name (case-insensitive)"
 // @Success 200 {array} api_types.ShareholderResponse
-// @Router /shareholders [get]
+// @Router /api/v1/shareholders [get]
 func (h *Handler) GetShareholders(ctx *gin.Context) {
 	nameFilter := ctx.Query("name")
 	shareholders, err := h.Repository.GetShareholdersWithFilter(nameFilter)
@@ -37,7 +37,7 @@ func (h *Handler) GetShareholders(ctx *gin.Context) {
 // @Success 200 {object} api_types.ShareholderResponse
 // @Failure 400 {object} map[string]string "Invalid ID format"
 // @Failure 404 {object} map[string]string "Shareholder not found"
-// @Router /shareholders/{id} [get]
+// @Router /api/v1/shareholders/{id} [get]
 func (h *Handler) GetShareholderByID(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -66,7 +66,7 @@ func (h *Handler) GetShareholderByID(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
 // @Security BearerAuth
-// @Router /shareholders [post]
+// @Router /api/v1/shareholders [post]
 func (h *Handler) CreateShareholder(ctx *gin.Context) {
 	var req api_types.ShareholderRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -95,7 +95,7 @@ func (h *Handler) CreateShareholder(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
 // @Security BearerAuth
-// @Router /shareholders/{id} [put]
+// @Router /api/v1/shareholders/{id} [put]
 func (h *Handler) UpdateShareholder(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -127,7 +127,7 @@ func (h *Handler) UpdateShareholder(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
 // @Security BearerAuth
-// @Router /shareholders/{id} [delete]
+// @Router /api/v1/shareholders/{id} [delete]
 func (h *Handler) DeleteShareholder(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -156,7 +156,7 @@ func (h *Handler) DeleteShareholder(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Failure 403 {object} map[string]string "Forbidden (not a moderator)"
 // @Security BearerAuth
-// @Router /shareholders/{id}/image [post]
+// @Router /api/v1/shareholders/{id}/image [post]
 func (h *Handler) UploadShareholderImage(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -187,7 +187,7 @@ func (h *Handler) UploadShareholderImage(ctx *gin.Context) {
 // @Failure 400 {object} map[string]string "Invalid ID format"
 // @Failure 401 {object} map[string]string "Unauthorized"
 // @Security BearerAuth
-// @Router /shareholders/{id}/add-to-draft [post]
+// @Router /api/v1/shareholders/{id}/add-to-draft [post]
 func (h *Handler) AddShareholderToDraft(ctx *gin.Context) {
 	// --- ИЗМЕНЕНИЕ ---
 	userID, err := GetUserID(ctx)

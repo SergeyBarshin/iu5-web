@@ -133,7 +133,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /dividend-calculations:
+  /api/v1/dividend-calculations:
     get:
       description: Get all calculations (except draft/deleted). Users see their own,
         moderators see all.
@@ -170,7 +170,7 @@ paths:
       summary: Get list of calculations
       tags:
       - calculations
-  /dividend-calculations/{id}:
+  /api/v1/dividend-calculations/{id}:
     delete:
       description: Logically delete a draft calculation.
       parameters:
@@ -273,7 +273,7 @@ paths:
       summary: Update a draft calculation
       tags:
       - calculations
-  /dividend-calculations/{id}/moderate:
+  /api/v1/dividend-calculations/{id}/moderate:
     put:
       consumes:
       - application/json
@@ -315,7 +315,7 @@ paths:
       summary: Moderate a calculation (Moderator only)
       tags:
       - calculations
-  /dividend-calculations/{id}/shareholders/{shareholder_id}:
+  /api/v1/dividend-calculations/{id}/shareholders/{shareholder_id}:
     delete:
       description: Removes a shareholder from the current user's draft calculation.
       parameters:
@@ -397,7 +397,7 @@ paths:
       summary: Update a shareholder's parameters in a draft calculation
       tags:
       - M-M
-  /dividend-calculations/{id}/submit:
+  /api/v1/dividend-calculations/{id}/submit:
     put:
       description: Change the status of a draft calculation to 'submitted'.
       parameters:
@@ -430,7 +430,7 @@ paths:
       summary: Submit a draft calculation
       tags:
       - calculations
-  /dividend-calculations/cart:
+  /api/v1/dividend-calculations/cart:
     get:
       description: Get current draft ID and item count for the authenticated user.
       produces:
@@ -451,7 +451,7 @@ paths:
       summary: Get cart info
       tags:
       - calculations
-  /shareholders:
+  /api/v1/shareholders:
     get:
       description: Get all shareholders with optional name filter. Publicly accessible.
       parameters:
@@ -512,7 +512,7 @@ paths:
       summary: Create a new shareholder (Moderator only)
       tags:
       - shareholders
-  /shareholders/{id}:
+  /api/v1/shareholders/{id}:
     delete:
       description: Logically delete a shareholder by its ID. Requires moderator rights.
       parameters:
@@ -625,7 +625,7 @@ paths:
       summary: Update a shareholder (Moderator only)
       tags:
       - shareholders
-  /shareholders/{id}/add-to-draft:
+  /api/v1/shareholders/{id}/add-to-draft:
     post:
       description: Adds a shareholder to the current user's draft calculation.
       parameters:
@@ -660,7 +660,7 @@ paths:
       summary: Add a shareholder to the draft calculation
       tags:
       - shareholders
-  /shareholders/{id}/image:
+  /api/v1/shareholders/{id}/image:
     post:
       consumes:
       - multipart/form-data
@@ -709,7 +709,7 @@ paths:
       summary: Upload an image for a shareholder (Moderator only)
       tags:
       - shareholders
-  /users/login:
+  /api/v1/users/login:
     post:
       consumes:
       - application/json
@@ -745,7 +745,7 @@ paths:
       summary: Log in a user
       tags:
       - users
-  /users/logout:
+  /api/v1/users/logout:
     post:
       description: Invalidates the current user's JWT token by adding it to a blacklist.
       produces:
@@ -768,7 +768,7 @@ paths:
       summary: Log out a user
       tags:
       - users
-  /users/me:
+  /api/v1/users/me:
     get:
       description: Retrieves the profile information for the authenticated user.
       produces:
@@ -824,7 +824,7 @@ paths:
       summary: Update current user's profile
       tags:
       - users
-  /users/register:
+  /api/v1/users/register:
     post:
       consumes:
       - application/json

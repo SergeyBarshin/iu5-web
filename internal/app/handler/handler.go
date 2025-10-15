@@ -35,21 +35,18 @@ func (h *Handler) RegisterRoutes(router *gin.Engine) {
 	// Добавляем Swagger UI
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	api := router.Group("/api/v1")
+	apiV1 := router.Group("/api/v1")
 	{
-		// --- Публичные роуты (доступны всем) ---
-		public := api.Group("/")
-		{
-			// Пользователь
-			public.POST("/users/register", h.RegisterUser)
-			public.POST("/users/login", h.LoginUser)
-			// Акционеры (только чтение)
-			public.GET("/shareholders", h.GetShareholders)
-			public.GET("/shareholders/:id", h.GetShareholderByID)
-		}
+		// --- Публичные роуты ---
+		// Пользователь
+		apiV1.POST("/users/register", h.RegisterUser)
+		apiV1.POST("/users/login", h.LoginUser)
+		// Акционеры (только чтение)
+		apiV1.GET("/shareholders", h.GetShareholders)
+		apiV1.GET("/shareholders/:id", h.GetShareholderByID)
 
 		// --- Защищенные роуты (требуют аутентификации) ---
-		protected := api.Group("/")
+		protected := apiV1.Group("/")
 		protected.Use(h.AuthMiddleware(false)) // false = не требует прав модератора
 		{
 			// Пользователь
@@ -74,7 +71,7 @@ func (h *Handler) RegisterRoutes(router *gin.Engine) {
 		}
 
 		// --- Роуты только для модераторов ---
-		moderator := api.Group("/")
+		moderator := apiV1.Group("/")
 		moderator.Use(h.AuthMiddleware(true)) // true = требует прав модератора
 		{
 			// Акционеры (полный CRUD)
