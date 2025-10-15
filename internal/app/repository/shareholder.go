@@ -13,7 +13,6 @@ import (
 )
 
 // GetShareholdersWithFilter возвращает список акционеров.
-// Аналог GetPlanets/GetPlanetsByName из референса.
 func (r *Repository) GetShareholdersWithFilter(nameFilter string) ([]ds.Shareholder, error) {
 	var shareholders []ds.Shareholder
 	query := r.db.Order("name ASC") // Сортируем по имени для предсказуемого результата
@@ -25,7 +24,6 @@ func (r *Repository) GetShareholdersWithFilter(nameFilter string) ([]ds.Sharehol
 }
 
 // GetShareholderByID возвращает одного акционера по ID.
-// Аналог GetPlanet из референса.
 func (r *Repository) GetShareholderByID(id uint) (ds.Shareholder, error) {
 	var shareholder ds.Shareholder
 	err := r.db.First(&shareholder, id).Error
@@ -39,7 +37,6 @@ func (r *Repository) GetShareholderByID(id uint) (ds.Shareholder, error) {
 }
 
 // CreateShareholder создает нового акционера.
-// Аналог CreatePlanet из референса.
 func (r *Repository) CreateShareholder(req api_types.ShareholderRequest) (ds.Shareholder, error) {
 	// Валидация, как в референсе (проверка на отрицательные значения и т.д.)
 	if req.Name == "" {
@@ -59,7 +56,6 @@ func (r *Repository) CreateShareholder(req api_types.ShareholderRequest) (ds.Sha
 }
 
 // UpdateShareholder обновляет данные акционера.
-// Аналог ChangePlanet из референса.
 func (r *Repository) UpdateShareholder(id uint, req api_types.ShareholderRequest) (ds.Shareholder, error) {
 	// Сначала находим существующего акционера
 	shareholder, err := r.GetShareholderByID(id)
@@ -85,7 +81,6 @@ func (r *Repository) UpdateShareholder(id uint, req api_types.ShareholderRequest
 }
 
 // DeleteShareholder удаляет акционера. Удаление изображения встроено.
-// Аналог DeletePlanet из референса.
 func (r *Repository) DeleteShareholder(id uint) error {
 	shareholder, err := r.GetShareholderByID(id)
 	if err != nil {
@@ -106,7 +101,6 @@ func (r *Repository) DeleteShareholder(id uint) error {
 }
 
 // UploadShareholderImage загружает изображение в MinIO и обновляет запись в БД.
-// Аналог UploadImage из референса.
 func (r *Repository) UploadShareholderImage(id uint, file *multipart.FileHeader) (ds.Shareholder, error) {
 	shareholder, err := r.GetShareholderByID(id)
 	if err != nil {
@@ -144,7 +138,6 @@ func (r *Repository) UploadShareholderImage(id uint, file *multipart.FileHeader)
 }
 
 // AddShareholderToDraftCalculation добавляет акционера в черновик расчета.
-// Аналог AddPlanetToResearch из референса.
 func (r *Repository) AddShareholderToDraftCalculation(shareholderID uint) error {
 	creatorID := r.GetUserID()
 	if creatorID == 0 {
@@ -183,8 +176,6 @@ func (r *Repository) AddShareholderToDraftCalculation(shareholderID uint) error 
 	return r.db.Create(&newLink).Error
 }
 
-// getOrCreateDraftCalculation - это вспомогательная функция, аналог GetResearchDraft из референса.
-// Она находит существующий черновик пользователя или создает новый, если его нет.
 func (r *Repository) getOrCreateDraftCalculation(creatorID uint) (ds.DividendCalculation, error) {
 	var calculation ds.DividendCalculation
 	err := r.db.Where("creator_id = ? AND status = ?", creatorID, "draft").First(&calculation).Error

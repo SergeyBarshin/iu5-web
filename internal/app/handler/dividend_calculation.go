@@ -12,7 +12,6 @@ import (
 
 // GetCartInfo обрабатывает GET /api/dividend-calculations/cart
 // Получает "иконку корзины" - ID и количество элементов в черновике.
-// Аналог GetResearchCart из референса.
 func (h *Handler) GetCartInfo(ctx *gin.Context) {
 	draftID, count, err := h.Repository.GetCartInfo()
 	if err != nil {
@@ -30,7 +29,6 @@ func (h *Handler) GetCartInfo(ctx *gin.Context) {
 
 // GetCalculationsList обрабатывает GET /api/dividend-calculations
 // Получает список расчетов с фильтрацией.
-// Аналог GetResearches из референса.
 func (h *Handler) GetCalculationsList(ctx *gin.Context) {
 	// Парсим query-параметры для фильтрации
 	status := ctx.Query("status")
@@ -67,7 +65,6 @@ func (h *Handler) GetCalculationsList(ctx *gin.Context) {
 
 // GetCalculationByID обрабатывает GET /api/dividend-calculations/:id
 // Получает один расчет со всеми его позициями.
-// Аналог GetRsearch из референса.
 func (h *Handler) GetCalculationByID(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -88,7 +85,6 @@ func (h *Handler) GetCalculationByID(ctx *gin.Context) {
 
 // UpdateCalculation обрабатывает PUT /api/dividend-calculations/:id
 // Обновляет поля черновика (например, общую прибыль).
-// Аналог ChangeResearch из референса.
 func (h *Handler) UpdateCalculation(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -116,7 +112,6 @@ func (h *Handler) UpdateCalculation(ctx *gin.Context) {
 
 // SubmitCalculation обрабатывает PUT /api/dividend-calculations/:id/submit
 // "Формирует" черновик, меняя его статус на 'submitted'.
-// Аналог FormResearch из референса.
 func (h *Handler) SubmitCalculation(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -137,7 +132,6 @@ func (h *Handler) SubmitCalculation(ctx *gin.Context) {
 
 // ModerateCalculation обрабатывает PUT /api/dividend-calculations/:id/moderate
 // "Завершает" или "Отклоняет" расчет, меняя статус.
-// Аналог ModerateResearch из референса.
 func (h *Handler) ModerateCalculation(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -167,7 +161,6 @@ func (h *Handler) ModerateCalculation(ctx *gin.Context) {
 
 // DeleteCalculation обрабатывает DELETE /api/dividend-calculations/:id
 // Логически удаляет расчет (меняет статус на 'deleted').
-// Аналог DeleteResearch из референса.
 func (h *Handler) DeleteCalculation(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

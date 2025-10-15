@@ -26,7 +26,6 @@ func (r *Repository) checkDraftAccess(calculationID uint) error {
 }
 
 // DeleteShareholderFromCalculation удаляет акционера из черновика расчета.
-// Аналог DeletePlanetFromResearch из референса.
 func (r *Repository) DeleteShareholderFromCalculation(calculationID, shareholderID uint) error {
 	// Сначала проверяем, имеет ли пользователь доступ к этому черновику
 	if err := r.checkDraftAccess(calculationID); err != nil {

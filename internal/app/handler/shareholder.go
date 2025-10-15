@@ -14,7 +14,6 @@ import (
 
 // GetShareholders обрабатывает GET /api/shareholders
 // Получает список акционеров, опционально с фильтром по имени.
-// Аналог GetPlanets из референса.
 func (h *Handler) GetShareholders(ctx *gin.Context) {
 	// Получаем query-параметр для фильтрации по имени
 	nameFilter := ctx.Query("name")
@@ -32,7 +31,6 @@ func (h *Handler) GetShareholders(ctx *gin.Context) {
 
 // GetShareholderByID обрабатывает GET /api/shareholders/:id
 // Получает одного акционера по его ID.
-// Аналог GetPlanet из референса.
 func (h *Handler) GetShareholderByID(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -53,7 +51,6 @@ func (h *Handler) GetShareholderByID(ctx *gin.Context) {
 
 // CreateShareholder обрабатывает POST /api/shareholders
 // Создает нового акционера.
-// Аналог CreatePlanet из референса.
 func (h *Handler) CreateShareholder(ctx *gin.Context) {
 	var req api_types.ShareholderRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -74,7 +71,6 @@ func (h *Handler) CreateShareholder(ctx *gin.Context) {
 
 // UpdateShareholder обрабатывает PUT /api/shareholders/:id
 // Обновляет существующего акционера.
-// Аналог ChangePlanet из референса.
 func (h *Handler) UpdateShareholder(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -100,7 +96,6 @@ func (h *Handler) UpdateShareholder(ctx *gin.Context) {
 
 // DeleteShareholder обрабатывает DELETE /api/shareholders/:id
 // Удаляет акционера.
-// Аналог DeletePlanet из референса.
 func (h *Handler) DeleteShareholder(ctx *gin.Context) {
 	logrus.Info("DeleteShareholder handler: started") // <-- Лог 1: Начало работы
 
@@ -133,7 +128,6 @@ func (h *Handler) DeleteShareholder(ctx *gin.Context) {
 
 // UploadShareholderImage обрабатывает POST /api/shareholders/:id/image
 // Загружает изображение для акционера.
-// Аналог UploadImage из референса.
 func (h *Handler) UploadShareholderImage(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -154,12 +148,13 @@ func (h *Handler) UploadShareholderImage(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, api_types.ConvertShareholderToResponse(shareholder))
+	ctx.JSON(http.StatusOK, gin.H{
+		"image_url": shareholder.ImageURL.String,
+	})
 }
 
 // AddShareholderToDraft обрабатывает POST /api/shareholders/:id/add-to-draft
 // Добавляет акционера в черновик расчета.
-// Аналог AddPlanetToResearch из референса.
 func (h *Handler) AddShareholderToDraft(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

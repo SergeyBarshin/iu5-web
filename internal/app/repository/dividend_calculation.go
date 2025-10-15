@@ -12,7 +12,6 @@ import (
 )
 
 // GetCartInfo возвращает ID черновика и количество акционеров в нем.
-// Аналог GetResearchCount и части GetResearchCart из референса.
 func (r *Repository) GetCartInfo() (uint, int64, error) {
 	creatorID := r.GetUserID()
 	if creatorID == 0 {
@@ -41,7 +40,6 @@ func (r *Repository) GetCartInfo() (uint, int64, error) {
 
 // GetCalculationsList возвращает список расчетов с фильтрацией.
 // Не возвращает "draft" и "deleted".
-// Аналог GetResearches из референса.
 func (r *Repository) GetCalculationsList(from, to time.Time, status string) ([]ds.DividendCalculation, error) {
 	var calculations []ds.DividendCalculation
 
@@ -66,7 +64,6 @@ func (r *Repository) GetCalculationsList(from, to time.Time, status string) ([]d
 }
 
 // GetCalculationWithShareholders получает один расчет со всеми его акционерами.
-// Аналог GetResearchPlanets из референса.
 func (r *Repository) GetCalculationWithShareholders(id uint) (ds.DividendCalculation, []ds.ShareholderInCalculation, error) {
 	var calculation ds.DividendCalculation
 	err := r.db.Preload("Creator").Preload("Moderator").First(&calculation, id).Error
@@ -94,7 +91,6 @@ func (r *Repository) GetCalculationWithShareholders(id uint) (ds.DividendCalcula
 }
 
 // UpdateCalculation обновляет поля расчета (только для черновика).
-// Аналог ChangeResearch из референса.
 func (r *Repository) UpdateCalculation(id uint, req api_types.CalculationUpdateRequest) (ds.DividendCalculation, error) {
 	var calculation ds.DividendCalculation
 	err := r.db.Where("id = ? AND status = 'draft'", id).First(&calculation).Error
@@ -117,7 +113,6 @@ func (r *Repository) UpdateCalculation(id uint, req api_types.CalculationUpdateR
 }
 
 // SubmitCalculation меняет статус с 'draft' на 'submitted'.
-// Аналог FormResearch из референса.
 func (r *Repository) SubmitCalculation(id uint) (ds.DividendCalculation, error) {
 	var calculation ds.DividendCalculation
 	err := r.db.First(&calculation, id).Error
@@ -148,7 +143,6 @@ func (r *Repository) SubmitCalculation(id uint) (ds.DividendCalculation, error) 
 }
 
 // ModerateCalculation меняет статус с 'submitted' на 'completed' или 'rejected'.
-// Аналог ModerateResearch из референса.
 func (r *Repository) ModerateCalculation(id uint, req api_types.ModerationRequest) (ds.DividendCalculation, error) {
 	if req.Status != "completed" && req.Status != "rejected" {
 		return ds.DividendCalculation{}, errors.New("invalid status for moderation: must be 'completed' or 'rejected'")
@@ -220,7 +214,6 @@ func (r *Repository) calculateFinalDividends(calculation *ds.DividendCalculation
 
 // DeleteCalculation выполняет логическое удаление расчета.
 // Для этого используется Raw SQL, как того требует задание.
-// Аналог DeleteCalculation из референса, но с логикой soft-delete.
 func (r *Repository) DeleteCalculation(id uint) error {
 	var calculation ds.DividendCalculation
 	// Сначала получаем расчет, чтобы проверить права

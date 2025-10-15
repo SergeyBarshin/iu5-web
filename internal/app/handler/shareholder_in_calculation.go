@@ -12,7 +12,6 @@ import (
 )
 
 // DeleteShareholderFromCalculation обрабатывает DELETE /api/dividend-calculations/:id/shareholders/:shareholder_id
-// Аналог DeletePlanetFromResearch из референса.
 func (h *Handler) DeleteShareholderFromCalculation(ctx *gin.Context) {
 	calcIDStr := ctx.Param("id") // Наш роутер использует :id
 	calcID, err := strconv.ParseUint(calcIDStr, 10, 32)
@@ -38,7 +37,6 @@ func (h *Handler) DeleteShareholderFromCalculation(ctx *gin.Context) {
 }
 
 // UpdateShareholderInCalculation обрабатывает PUT /api/dividend-calculations/:id/shareholders/:shareholder_id
-// Аналог ChangePlanetResearch из референса.
 func (h *Handler) UpdateShareholderInCalculation(ctx *gin.Context) {
 	calcIDStr := ctx.Param("id")
 	calcID, err := strconv.ParseUint(calcIDStr, 10, 32)
