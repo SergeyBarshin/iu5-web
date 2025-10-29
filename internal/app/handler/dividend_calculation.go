@@ -4,6 +4,7 @@ package handler
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"shareholder-app/internal/app/api_types"
 	"strconv"
@@ -56,7 +57,10 @@ func (h *Handler) GetCalculationsList(ctx *gin.Context) {
 		h.errorHandler(ctx, http.StatusUnauthorized, err)
 		return
 	}
+
+	
 	isModerator, _ := GetUserRole(ctx)
+	log.Printf("[HANDLER DEBUG] GetCalculationsList called. UserID: %d, IsModerator: %v\n", userID, isModerator)
 
 	status := ctx.Query("status")
 	dateFromStr := ctx.Query("from_date")

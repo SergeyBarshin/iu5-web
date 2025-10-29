@@ -13,6 +13,10 @@ import (
 	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"log"
+
+	"gorm.io/gorm/logger" // <-- Добавьте этот импорт
 )
 
 var (
@@ -29,7 +33,18 @@ type Repository struct {
 }
 
 func NewRepository(dsn string, mc *minioClient.Client) (*Repository, error) {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	newLogger := logger.New(
+        log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+        logger.Config{
+            SlowThreshold:             time.Second, // Порог медленных запросов
+            LogLevel:                  logger.Info, // Уровень логгирования
+            IgnoreRecordNotFoundError: true,        // Не логировать ошибки "запись не найдена"
+            Colorful:                  true,        // Цветной вывод
+        },
+    )
+
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: newLogger})
 	if err != nil {
 		return nil, err
 	}

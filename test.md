@@ -86,3 +86,78 @@ swag init -g ./cmd/app/main.go -d ./
    code
    Bash
    docker-compose exec redis redis-cli
+
+3. "результат ... в м-м не обязательный. Он хранится, а вычисляется 1 раз"
+   Это требование означает, что поле final_dividend в таблице shareholder_dividend_calculations должно быть nullable (может быть пустым). Оно остается пустым (NULL) для заявок в статусе "черновик" (draft) и "сформирован" (submitted), и получает значение только один раз, когда модератор меняет статус на "завершен" (completed).
+
+Как это реализовано в коде:
+В модели GORM (ds):
+В файле internal/app/ds/shareholder-dividend-calculation.go поле определено как sql.NullFloat64. Это как раз и делает его nullable на уровне базы данных.
+code
+Go
+// ...
+FinalDividend sql.NullFloat64 `gorm:"type:numeric(15,2);default:null"`
+// ...
+В структуре ответа API (api_types):
+В файле internal/app/api_types/dividend_calculation_json.go в структуре CalculationItemResponse поле определено как указатель *float64 и имеет тег omitempty.
+code
+Go
+// ...
+FinalDividend *float64 `json:"final_dividend,omitempty"`
+// ...
+\*float64 (указатель) позволяет полю принимать значение nil, которое в JSON превратится в null.
+omitempty — это очень важный тег. Он говорит, что если значение поля nil, то оно вообще не будет включено в JSON-ответ.
+Как это проверить в Postman:
+Шаг 1: Выполните GET-запрос на получение черновика или сформированной заявки:
+GET http://localhost:8080/api/v1/dividend-calculations/{id}
+В ответе, в массиве items, у каждого элемента не будет поля final_dividend.
+Шаг 2: Завершите эту заявку через метод модератора:
+PUT http://localhost:8080/api/v1/dividend-calculations/{id}/moderate
+с телом {"status": "completed"} и токеном модератора.
+Шаг 3: Снова выполните тот же GET-запрос, что и в Шаге 1.
+Теперь в ответе, в массиве items, у каждого элемента появится поле final_dividend с рассчитанным числовым значением. 2. "1 заявка, все данные для страницы из 1 лабы... Результат из поля, даже пустой"
+Это требование означает, что для страницы просмотра одной заявки (расчета) фронтенду нужен один-единственный API-запрос, который вернет сразу все данные: информацию о самой заявке, список всех входящих в нее акционеров ("услуг") и данные из связующей таблицы ("м-м").
+
+Как это реализовано в коде:
+Эту задачу выполняет эндпоинт GET /api/v1/dividend-calculations/{id}.
+
+В репозитории (repository):
+Функция GetCalculationWithShareholders в файле internal/app/repository/dividend*calculation.go сначала загружает саму заявку (calculation), а затем отдельным запросом загружает все связанные с ней элементы (items) с помощью Preload("Shareholder"), чтобы сразу подтянуть данные об акционерах.
+В конвертере (api_types):
+Функция ConvertCalculationToDetailedResponse собирает все эти данные в одну большую, вложенную JSON-структуру, которая идеально подходит для фронтенда.
+Как это проверить в Postman:
+Шаг 1: Выполните запрос в Postman:
+GET http://localhost:8080/api/v1/dividend-calculations/{id*вашей_заявки}
+Шаг 2: Посмотрите на структуру ответа. Она будет именно такой, как вам нужно для страницы:
+code
+JSON
+{
+"id": 5,
+"status": "completed",
+"total_profit": 1000000.00,
+"creator": { /_ ... _/ },
+"moderator": { /_ ... _/ },
+// Главное - вложенный массив "items"
+"items": [
+{
+// Данные об "услуге" (акционере)
+"shareholder": {
+"id": 1,
+"name": "Иванов Иван Иванович",
+"share": 50.00,
+"image_url": "http://..."
+},
+// Данные из "м-м" таблицы
+"coefficient": 1.0,
+"fine": 0.0,
+// "Результат из поля", который может быть, а может и не быть
+"final_dividend": 450000.00
+},
+{
+"shareholder": { /* ... */ },
+"coefficient": 0.9,
+"fine": 10000.00,
+"final_dividend": 215000.00
+}
+]
+}

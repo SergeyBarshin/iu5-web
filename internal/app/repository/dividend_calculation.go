@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"shareholder-app/internal/app/api_types"
 	"shareholder-app/internal/app/ds"
 	"time"
@@ -49,6 +50,8 @@ func (r *Repository) GetCalculationsList(from, to time.Time, status string, user
 	if status != "" {
 		query = query.Where("status = ?", status)
 	}
+	log.Printf("[REPO DEBUG] Building query. UserID: %d, IsModerator: %v\n", userID, isModerator)
+
 	err := query.Order("id DESC").Find(&calculations).Error
 	return calculations, err
 }
